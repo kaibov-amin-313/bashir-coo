@@ -1,0 +1,38 @@
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+/* Count badge — rosewood accent, small-scale use exactly as the token
+   rules prescribe. Sits at the top-right of the glyph. */
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: var(--color-surface-primary);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 17px;
+  text-align: center;
+  letter-spacing: 0;
+}

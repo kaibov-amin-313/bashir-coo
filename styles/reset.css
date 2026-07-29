@@ -1,0 +1,135 @@
+/**
+ * Bashir&Co — Global reset and base styles.
+ *
+ * Loaded after `/tokens/tokens.css` (see `app/globals.css`) — every value
+ * below references a token custom property; nothing here is a raw,
+ * un-sourced number. Per Production Architecture Plan Ch.19: no ad-hoc
+ * values outside `/tokens` are permitted, including here.
+ *
+ * This is a RESET, not the final visual system. Form control appearance
+ * normalization is intentionally minimal — full custom form styling is
+ * Form.Field's own job in a later phase (Production Architecture Plan,
+ * Phase 13), not this file's.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Told the browser (and native UI it renders — scrollbars, form
+     control chrome, autofill backgrounds) to use dark rendering by
+     default, so nothing native flashes light on an all-dark site. */
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* CRITICAL SCROLL ARCHITECTURE — do not reintroduce `height: 100%` here.
+   The earlier `html, body { height: 100%; overflow-x: hidden }` pairing
+   was a real, site-breaking bug: per the CSS spec, setting overflow-x on
+   an element forces its computed overflow-y from `visible` to `auto`, so
+   a body with a FIXED viewport height + overflow-x became a nested
+   scroll container exactly one viewport tall. The window itself then
+   never scrolled — Lenis (window-based) hijacked wheel input with
+   nothing to move (scroll felt completely blocked), and ScrollTrigger
+   (window-based) never advanced (sections stayed at autoAlpha: 0,
+   invisible). Horizontal containment lives on body ONLY, without a
+   fixed height: body then grows with content, and its overflow-x
+   propagates to the viewport per the spec instead of creating an inner
+   scroller. */
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height — accounts for mobile browser chrome */
+  overflow-x: hidden;
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif; /* TEMPORARY — no typeface has been chosen yet, see README */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Neutral, inverted selection — no brand color introduced. */
+::selection {
+  background-color: var(--color-text-primary);
+  color: var(--color-surface-primary);
+}
+
+/* Media defaults. */
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Link reset — CTA.Base and Nav components define their own treatment in
+   a later phase; this only removes browser defaults. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Button reset. */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Form element reset — minimal on purpose, see file header. */
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+/* Focus handling — never the browser default blue ring, and never a ring
+   at all for pointer users. `:focus-visible` shows it only for keyboard
+   navigation, matching Component Library Ch.14. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* No scroll-snap anywhere in this system — Motion Bible/Component
+   Library Ch.13 forbid it as fighting the continuous-motion transition
+   language between sections. Nothing to reset (it defaults to `none`);
+   this comment exists so it is never introduced later "for polish." */
+
+/* Base-level reduced-motion floor. This is a safety net that applies even
+   before GSAP's own `gsap.matchMedia()` reduced-motion branches exist
+   (Production Architecture Plan Ch.7) — it does not replace them once
+   built, it guarantees a minimum even on pages/components that haven't
+   been wired into that system yet. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

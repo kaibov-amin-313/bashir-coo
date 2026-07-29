@@ -1,0 +1,206 @@
+/**
+ * Bashir&Co — Design tokens as CSS Custom Properties.
+ *
+ * This file MUST stay in lockstep with the TypeScript modules in this same
+ * `/tokens` folder — see Production Architecture Plan Ch.6, "one source of
+ * truth, two consumption paths." If you change a value here, change its
+ * matching TS value too, and vice versa. There is no build step generating
+ * one from the other yet; that is a reasonable future improvement once a
+ * real component library exists to justify it, not a Phase 1–2 concern.
+ *
+ * Breakpoints are NOT defined here as custom properties — CSS Custom
+ * Properties cannot be used inside `@media` query conditions in standard
+ * CSS. See `/tokens/breakpoints.ts` for the full explanation. The literal
+ * pixel values below (600px, 1024px, 1920px) are hand-copied from that
+ * file and must be updated by hand if it ever changes.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---------------------------------------------------------------- */
+  /* Color                                                              */
+  /* ---------------------------------------------------------------- */
+  --color-surface-primary: #faf7f1;
+  --color-surface-secondary: #f2ede3;
+  --color-surface-tertiary: #ede6d9;
+  /* Warm charcoal — the only dark surface, for contrast blocks (footer,
+     select accents). Quiet-luxury direction: dark is an accent, never
+     the ground. */
+  --color-surface-contrast: #4a2c28;
+  --color-text-on-contrast: #f2e4df;
+  /* Bashir Rosewood — the house signature accent: leather/rosewood/clay,
+     deliberately browner and deeper than any fashion-house red. Used
+     ONLY at small scale: hairlines, active nav state, step numerals,
+     CTA hover, footer accent. Never a background wash. */
+  --color-accent: #7a3b34;
+  --color-accent-strong: #5e2c26;
+
+  --color-text-primary: #262220;
+  --color-text-primary-max: #241f19;
+  --color-text-secondary: #6f665d;
+  --color-text-muted: #9a9186;
+
+  /* Derived from --color-text-primary via color-mix(), not a second
+     hardcoded value — Design System's 8–12% opacity border rule. */
+  --color-border: #e4ddd0;
+
+  --color-focus-ring: var(--color-text-primary-max);
+
+  /* The one deliberate UI-color exception — muted, always paired with a
+     non-color signal. There is NO --color-state-success token. Confirmation
+     states use typography and motion only (Design System Ch.2). Do not add
+     one without updating the Design System first. */
+  --color-state-error: #96604f;
+
+  /* ---------------------------------------------------------------- */
+  /* Typography — 14 tokens × (size, line-height, tracking, weight)     */
+  /* Hero headline and Act title use clamp() for fluid, viewport-height- */
+  /* proportional mobile scale; every other token gets a discrete mobile */
+  /* override below, inside an @media rule (see breakpoints note above). */
+  /* ---------------------------------------------------------------- */
+  --type-wordmark-size: 1.25rem;
+  --type-wordmark-line-height: 1;
+  --type-wordmark-tracking: -0.005em;
+  --type-wordmark-weight: 400;
+
+  --type-hero-headline-size: clamp(2rem, 3vw, 3rem);
+  --type-hero-headline-line-height: 1.1;
+  --type-hero-headline-tracking: -0.015em;
+  --type-hero-headline-weight: 400;
+
+  --type-act-title-size: clamp(1.5rem, 2.2vw, 2.25rem);
+  --type-act-title-line-height: 1.1;
+  --type-act-title-tracking: -0.01em;
+  --type-act-title-weight: 400;
+
+  --type-section-statement-size: 1.875rem;
+  --type-section-statement-line-height: 1.28;
+  --type-section-statement-tracking: -0.005em;
+  --type-section-statement-weight: 400;
+
+  --type-collection-title-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  --type-collection-title-line-height: 1.15;
+  --type-collection-title-tracking: -0.005em;
+  --type-collection-title-weight: 500;
+
+  --type-object-title-size: clamp(1.125rem, 1.4vw, 1.5rem);
+  --type-object-title-line-height: 1.2;
+  --type-object-title-tracking: 0em;
+  --type-object-title-weight: 400;
+
+  --type-provenance-size: 1.0625rem;
+  --type-provenance-line-height: 1.6;
+  --type-provenance-tracking: 0.002em;
+  --type-provenance-weight: 400;
+
+  --type-body-size: 1.0625rem;
+  --type-body-line-height: 1.55;
+  --type-body-tracking: 0em;
+  --type-body-weight: 400;
+
+  --type-caption-size: 0.8125rem;
+  --type-caption-line-height: 1.45;
+  --type-caption-tracking: 0.015em;
+  --type-caption-weight: 400;
+
+  --type-metadata-size: 0.6875rem;
+  --type-metadata-line-height: 1.4;
+  --type-metadata-tracking: 0.16em;
+  --type-metadata-weight: 400;
+
+  --type-nav-size: 0.875rem;
+  --type-nav-line-height: 1.3;
+  --type-nav-tracking: 0.03em;
+  --type-nav-weight: 400;
+
+  --type-form-label-size: 0.8125rem;
+  --type-form-label-line-height: 1.3;
+  --type-form-label-tracking: 0.02em;
+  --type-form-label-weight: 500;
+
+  --type-cta-size: 0.9375rem;
+  --type-cta-line-height: 1.2;
+  --type-cta-tracking: 0.03em;
+  --type-cta-weight: 500;
+
+  --type-legal-size: 0.75rem;
+  --type-legal-line-height: 1.5;
+  --type-legal-tracking: 0.005em;
+  --type-legal-weight: 400;
+
+  /* ---------------------------------------------------------------- */
+  /* Spacing — 8px base scale                                          */
+  /* ---------------------------------------------------------------- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 48px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --space-8: 120px;
+  --space-9: 160px;
+  --space-10: 200px;
+  --space-11: 240px;
+  --space-12: 320px;
+
+  /* ---------------------------------------------------------------- */
+  /* Border, radius, shadow                                            */
+  /* ---------------------------------------------------------------- */
+  --border-hairline: 1px;
+  --border-focus: 3px;
+  --radius-minimal: 2px;
+  --shadow-media-edge: inset 0 0 28px rgba(56, 48, 38, 0.12);
+
+  /* ---------------------------------------------------------------- */
+  /* Z-index — five layers, ordered                                    */
+  /* ---------------------------------------------------------------- */
+  --z-base-content: 0;
+  --z-sticky-nav-mark: 10;
+  --z-recognition-gesture-overlay: 20;
+  --z-fullscreen-nav-overlay: 30;
+  --z-threshold-top-layer: 40;
+
+  /* ---------------------------------------------------------------- */
+  /* Typefaces — editorial serif for display/headings, existing system  */
+  /* sans for UI/nav/body. System serif stack: zero-download, safe.     */
+  /* ---------------------------------------------------------------- */
+  --font-heading: "Cormorant", "Cormorant Fallback", Georgia, "Times New Roman", serif;
+
+  /* ---------------------------------------------------------------- */
+  /* Surface grain — photographic film grain as an inline SVG noise     */
+  /* texture. THE core "material vs. flat digital black" device of the  */
+  /* Visual Atmosphere Pass: laid at very low opacity over dark          */
+  /* surfaces, it reads as film stock, not decoration. One definition,   */
+  /* consumed via var() wherever a surface needs material presence.     */
+  /* Not a particle effect and never animated.                          */
+  /* ---------------------------------------------------------------- */
+  --surface-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* ---------------------------------------------------------------- */
+  /* Motion — for simple CSS transitions only (hover, focus). Complex,  */
+  /* scrubbed, or timeline-based motion reads from /tokens/motion.ts   */
+  /* via GSAP instead — see that file's header comment.                */
+  /* ---------------------------------------------------------------- */
+  --motion-micro: 0.14s;
+  --motion-standard: 1s;
+  --ease-default: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* power2.out approximation for plain CSS */
+}
+
+/* Mobile typography overrides — literal breakpoint value (600px), see
+   the breakpoints note at the top of this file. */
+@media (max-width: 599px) {
+  :root {
+    --type-wordmark-size: 1.125rem;
+    --type-section-statement-size: 1.25rem;
+    --type-collection-title-size: clamp(1.5rem, 2.4vw, 2.25rem);
+    --type-object-title-size: clamp(1.125rem, 1.4vw, 1.5rem);
+    --type-provenance-size: 1rem; /* accessibility floor */
+    --type-body-size: 1rem; /* accessibility floor */
+    --type-caption-size: 0.75rem; /* system floor */
+    --type-cta-size: 0.875rem;
+    /* wordmark, metadata, nav, form-label, legal are unchanged on mobile —
+       see /tokens/typography.ts for the reasoning per token. */
+  }
+}

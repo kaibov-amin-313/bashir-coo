@@ -1,0 +1,87 @@
+/**
+ * Bashir&Co — Preloader.
+ *
+ * The mark is drawn, then filled. Getting this to look like the logo
+ * rather than a fattened version of it took one specific trick: the
+ * stroke is what animates, but a stroke sits *centred on* the contour,
+ * so half of it spills outside the letterform and thickens it. So the
+ * stroke is hairline-thin (1px, non-scaling) — just enough to read as a
+ * drawn line — and it fades out as the fill fades in. What's left at the
+ * end is the fill alone: the logo exactly as designed, not an outline of
+ * it.
+ */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface-primary);
+  opacity: 1;
+  transition: opacity 650ms var(--ease-default, ease);
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.markWrap {
+  width: min(64vw, 380px);
+}
+
+.mark {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.strokeGroup path {
+  fill: var(--color-accent);
+  fill-opacity: 0;
+
+  stroke: var(--color-accent);
+  /* Hairline: a thicker stroke would bleed outside the contour and make
+     the calligraphy look bold. 1px, and it never scales with the group. */
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+
+  animation:
+    bc-draw 1100ms cubic-bezier(0.65, 0, 0.35, 1) forwards,
+    bc-fill 600ms ease-out 850ms forwards,
+    bc-unstroke 500ms ease-out 1000ms forwards;
+}
+
+@keyframes bc-draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes bc-fill {
+  from { fill-opacity: 0; }
+  to   { fill-opacity: 1; }
+}
+
+/* The stroke retires once the fill has arrived, leaving the exact
+   letterform behind rather than an outlined one. */
+@keyframes bc-unstroke {
+  from { stroke-opacity: 1; }
+  to   { stroke-opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strokeGroup path {
+    animation: none;
+    stroke-opacity: 0;
+    fill-opacity: 1;
+  }
+  .root { transition: opacity 200ms linear; }
+}

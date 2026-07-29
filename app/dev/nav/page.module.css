@@ -1,0 +1,12 @@
+.page {
+  min-height: 100dvh;
+  background-color: var(--color-surface-secondary);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 640px;
+  padding: var(--space-9) var(--space-4) var(--space-4);
+}

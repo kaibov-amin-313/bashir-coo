@@ -1,0 +1,223 @@
+/**
+ * Bashir&Co — the filter panel. Slides in from the right over a dimmed
+ * page; the page behind is locked so the wheel scrolls the panel, not
+ * the catalogue underneath it.
+ */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background-color: rgba(38, 34, 32, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 320ms var(--ease-default),
+    visibility 0s linear 320ms;
+}
+.scrimOpen {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 901;
+  width: min(92vw, 400px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-primary);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -24px 0 60px -30px rgba(38, 34, 32, 0.4);
+
+  transform: translateX(100%);
+  transition: transform 380ms var(--ease-default);
+}
+.open {
+  transform: translateX(0);
+}
+
+/* ---- Head ---- */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.close {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-size: 1.125rem;
+  line-height: 1;
+  transition: border-color var(--motion-micro) var(--ease-default);
+}
+.close:hover,
+.close:focus-visible {
+  border-color: var(--color-accent);
+}
+
+/* ---- Body ---- */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5) var(--space-6);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.group:last-child { border-bottom: none; }
+
+.groupTitle {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: color var(--motion-micro) var(--ease-default);
+}
+.option:hover { color: var(--color-accent); }
+
+.option input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex: none;
+}
+
+.optionLabel { flex: 1; }
+
+.count {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+/* ---- Foot ---- */
+.foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface-primary);
+}
+
+.reset,
+.apply {
+  min-height: 48px;
+  border-radius: 1px;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    opacity var(--motion-micro) var(--ease-default),
+    background-color var(--motion-standard) var(--ease-default);
+}
+
+.reset {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+.reset:hover:not(:disabled) { border-color: var(--color-accent); }
+.reset:disabled { opacity: 0.4; cursor: default; }
+
+.apply {
+  background-color: var(--color-surface-contrast);
+  border: none;
+}
+.apply :global(span) { color: var(--color-text-on-contrast); }
+.apply:hover { background-color: var(--color-accent-strong); }
+
+/* ---- Accordion: a category, with its own subcategories beneath ---- */
+.accordionItem {
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+}
+.accordionItem:last-child { border-bottom: none; }
+
+.accordionHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.accordionHead .option { flex: 1; }
+
+.chevron {
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition:
+    transform var(--motion-standard) var(--ease-default),
+    color var(--motion-micro) var(--ease-default);
+}
+.chevron:hover, .chevron:focus-visible { color: var(--color-accent); }
+.chevronOpen {
+  transform: rotate(90deg);
+  color: var(--color-accent);
+}
+
+/* Collapsed by default. grid-template-rows animates a height we never
+   have to measure — a max-height guess would either clip a long list or
+   leave dead space under a short one. */
+.subList {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms var(--ease-default);
+}
+.subListOpen { grid-template-rows: 1fr; }
+.subListInner { overflow: hidden; }
+
+.subOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0 var(--space-2) var(--space-5);
+  min-height: 40px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: color var(--motion-micro) var(--ease-default);
+}
+.subOption:hover { color: var(--color-accent); }
+.subOption input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex: none;
+}

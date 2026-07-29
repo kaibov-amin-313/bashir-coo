@@ -1,0 +1,269 @@
+/**
+ * Bashir&Co — overlay header (Brunello Cucinelli structure).
+ * Lit wordmark → centered nav → thin runner. No bordeaux double rule.
+ */
+.header {
+  /* The dropdown positions against the header, so it needs a positioned
+     ancestor — without this it would anchor to the page and hang in the
+     wrong place once the header is fixed. */
+  position: relative;
+  z-index: var(--z-sticky-nav-mark);
+  /* The light/dark switch is animated, not instantaneous: hovering the
+     menu shouldn't make the header flash. */
+  transition:
+    transform var(--motion-standard, 380ms) var(--ease-default),
+    background-color 320ms var(--ease-default);
+  will-change: transform;
+}
+
+/* Hide-on-scroll: whole header slides up out of view; reveals on scroll up. */
+.hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header { transition: none; }
+}
+
+/* Overlay: sits over the hero photo; children go light. */
+.overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  background: linear-gradient(to bottom, rgba(38,34,32,0.28), transparent);
+}
+.overlay .navLink, .overlay .search, .overlay .localeLink, .overlay .localeDivider,
+.overlay .announceText, .overlay .announceArrow {
+  color: var(--color-text-on-contrast);
+}
+
+/* Everything that changes colour with the theme does so on the same
+   curve, so the header switches as one piece rather than in stages. */
+.header .navLink,
+.header .search,
+.header .localeLink,
+.header .localeDivider,
+.header .announceText,
+.header .announceArrow,
+.header .wordmark {
+  transition: color 320ms var(--ease-default);
+}
+.overlay .navLink :global(*), .overlay .search :global(*),
+.overlay .announceText :global(*) { color: var(--color-text-on-contrast); }
+.overlay .searchIcon { color: var(--color-text-on-contrast); }
+.overlay .iconLink, .overlay .actions { color: var(--color-text-on-contrast); }
+.overlay .menuIcon, .overlay .menuIcon::before, .overlay .menuIcon::after { background-color: var(--color-text-on-contrast); }
+/* Over a photograph the mark goes ivory — currentColor, no filters. */
+.overlay .wordmark { color: var(--color-text-on-contrast); }
+
+/* Solid: inner pages, sticky on ivory. */
+.solid {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background-color: color-mix(in srgb, var(--color-surface-primary) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 2px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-border);
+}
+/* On cream the mark goes rosewood. */
+.solid .wordmark { color: var(--color-accent); }
+.solid .iconLink, .solid .actions { color: var(--color-text-primary); }
+
+/* ---- Tier 1: wordmark ---- */
+.brandRow {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-4) var(--space-6) var(--space-2);
+}
+.wordmark { display: inline-flex; text-decoration: none; }
+/* Size lives here, not in the component's prop, so it can respond to
+   the breakpoint — the three-tier header has room on desktop that a
+   phone doesn't. */
+.wordmarkImg {
+  height: 56px;
+  width: auto;
+  display: block;
+}
+.wordmark { transition: color var(--motion-standard) var(--ease-default); }
+
+/* ---- Tier 2: nav row ---- */
+.navRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-1) var(--space-6) var(--space-3);
+}
+.search {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-self: start;
+  opacity: 0.85;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: var(--space-2) 0;
+  min-height: 44px;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.search:hover, .search:focus-visible { opacity: 1; }
+.searchIcon {
+  width: 13px; height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  position: relative; display: inline-block;
+}
+.searchIcon::after {
+  content: ""; position: absolute; right: -4px; bottom: -3px;
+  width: 6px; height: 1.5px; background-color: currentColor; transform: rotate(45deg);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+.navLink {
+  text-decoration: none;
+  padding: var(--space-2) 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.navLink:hover, .navLink:focus-visible { opacity: 1; }
+.active { opacity: 1; }
+.solid .active { color: var(--color-accent); }
+
+.locales { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Right cluster of the nav row: contact + cart icons, locale switcher,
+   and the menu button, grouped into the grid's third (1fr) column so the
+   three-column `1fr auto 1fr` layout stays intact — they share one cell
+   rather than each claiming a column. */
+.rightZone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-self: end;
+}
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.iconLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: inherit;
+  opacity: 0.85;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.iconLink:hover, .iconLink:focus-visible { opacity: 1; }
+.actionIcon { width: 22px; height: 22px; display: block; }
+.localeLink {
+  text-decoration: none;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  padding: var(--space-2) 2px;
+  min-height: 44px;
+  display: inline-flex; align-items: center;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.localeLink:hover, .localeLink:focus-visible { opacity: 0.9; }
+.localeActive { opacity: 1; }
+.solid .localeActive { color: var(--color-accent); }
+.localeDivider { opacity: 0.35; font-size: 0.6875rem; }
+
+/* ---- Tier 3: thin runner (no double rule) ---- */
+.announce {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  min-height: 38px;
+  padding: 0 var(--space-5);
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.overlay .announce { border-top-color: rgba(242,228,223,0.25); }
+.solid .announce { border-top-color: var(--color-border); }
+.announceArrow {
+  background: none; border: none; cursor: pointer;
+  font-size: 1rem; line-height: 1; padding: var(--space-2);
+  opacity: 0.7; transition: opacity var(--motion-micro) var(--ease-default);
+}
+.announceArrow:hover { opacity: 1; }
+.announceText { text-align: center; opacity: 0.9; }
+.solid .announceText { color: var(--color-text-secondary); }
+.solid .announceArrow { color: var(--color-accent); }
+
+.menuButton {
+  display: none; background: none; border: none;
+  padding: var(--space-2); min-width: 44px; min-height: 44px;
+  cursor: pointer; align-items: center; justify-content: center; justify-self: end;
+}
+.menuIcon { display: block; width: 20px; height: 1px; position: relative; }
+.solid .menuIcon, .solid .menuIcon::before, .solid .menuIcon::after { background-color: var(--color-text-primary); }
+.menuIcon::before, .menuIcon::after { content: ""; position: absolute; left: 0; width: 20px; height: 1px; background-color: inherit; }
+.menuIcon::before { top: -6px; }
+.menuIcon::after { top: 6px; }
+
+@media (max-width: 899px) {
+  .nav { display: none; }
+  .menuButton { display: inline-flex; }
+  /* Поиск остаётся — только иконка, без подписи. */
+  .search :global(span:last-child) { display: none; }
+  .navRow { grid-template-columns: auto 1fr auto; padding: var(--space-1) var(--space-3) var(--space-3); }
+  .brandRow { padding: var(--space-3) var(--space-3) var(--space-2); }
+  .wordmarkImg { height: 44px; }
+}
+
+/* Spacer reserves the fixed solid header's height so content isn't hidden. */
+.spacer {
+  height: 222px;
+}
+@media (max-width: 899px) {
+  .spacer { height: 200px; }
+}
+
+/* Overlay header, once scrolled past the hero: becomes a solid, legible
+   bar (cream bg, dark text, rosewood accents) and fixed so it can slide
+   in/out over page content. */
+.overlay.scrolledSolid {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background-color: color-mix(in srgb, var(--color-surface-primary) 96%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+.overlay.scrolledSolid .navLink,
+.overlay.scrolledSolid .search,
+.overlay.scrolledSolid .localeLink,
+.overlay.scrolledSolid .localeDivider,
+.overlay.scrolledSolid .announceText,
+.overlay.scrolledSolid .announceArrow {
+  color: var(--color-text-primary);
+}
+.overlay.scrolledSolid .navLink :global(*),
+.overlay.scrolledSolid .search :global(*),
+.overlay.scrolledSolid .announceText :global(*) { color: var(--color-text-primary); }
+.overlay.scrolledSolid .searchIcon { color: var(--color-text-primary); }
+.overlay.scrolledSolid .iconLink,
+.overlay.scrolledSolid .actions { color: var(--color-text-primary); }
+.overlay.scrolledSolid .menuIcon,
+.overlay.scrolledSolid .menuIcon::before,
+.overlay.scrolledSolid .menuIcon::after { background-color: var(--color-text-primary); }
+.overlay.scrolledSolid .active,
+.overlay.scrolledSolid .localeActive { color: var(--color-accent); }
+.overlay.scrolledSolid .announceArrow { color: var(--color-accent); }
+.overlay.scrolledSolid .announce { border-top-color: var(--color-border); }
+/* Once scrolled onto cream, the mark switches to rosewood. */
+.overlay.scrolledSolid .wordmark { color: var(--color-accent); }

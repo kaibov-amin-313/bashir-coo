@@ -1,0 +1,230 @@
+/* Bashir&Co — cart panel. A slide-in drawer that reads as a considered,
+   gallery-grade surface rather than an empty sheet: a defined header, a
+   composed empty state that sits in the upper third (not stranded in the
+   vertical centre of a tall panel), and a footer pinned to the bottom. */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background-color: color-mix(in srgb, var(--color-text-primary) 38%, transparent);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-standard) var(--ease-default);
+}
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 901;
+  width: min(92vw, 400px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-primary);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -24px 0 60px -30px rgba(38, 34, 32, 0.4);
+  transform: translateX(100%);
+  transition: transform var(--motion-standard) var(--ease-default);
+}
+.panelOpen {
+  transform: translateX(0);
+}
+
+/* ---- Header ---- */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.title { display: flex; flex-direction: column; gap: 4px; }
+.titleMain {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+.titleCount {
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.6875rem;
+}
+
+.close {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  min-width: 42px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  line-height: 1;
+  transition: border-color var(--motion-micro) var(--ease-default),
+    color var(--motion-micro) var(--ease-default);
+}
+.close:hover,
+.close:focus-visible { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* ---- Body ---- */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--space-5);
+}
+
+/* Empty state: composed block sitting in the upper third of the drawer,
+   not vertically centred in a tall void. Bag glyph, a serif line, and a
+   quiet instruction — it should feel intentional, like an empty vitrine. */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding-top: var(--space-9);
+  color: var(--color-text-secondary);
+}
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-border);
+}
+.emptyTitle {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+.emptyHint { max-width: 26ch; }
+
+.line {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.line:first-child { padding-top: var(--space-4); }
+.lineMedia {
+  position: relative;
+  width: 76px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: var(--color-surface-secondary);
+}
+.lineInfo { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lineTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.lineCategory {
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.625rem;
+}
+.linePrice { color: var(--color-text-secondary); }
+
+.qtyRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.qtyBtn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: border-color var(--motion-micro) var(--ease-default);
+}
+.qtyBtn:hover:not(:disabled),
+.qtyBtn:focus-visible { border-color: var(--color-accent); }
+.qtyBtn:disabled { opacity: 0.4; cursor: default; }
+.qtyValue { min-width: 1.5ch; text-align: center; }
+
+.remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color var(--motion-micro) var(--ease-default);
+}
+.remove:hover,
+.remove:focus-visible { color: var(--color-accent); }
+
+/* ---- Footer ---- */
+.foot {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-surface-secondary);
+}
+.summaryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.summaryLabel { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; color: var(--color-text-muted); }
+.summaryValue { color: var(--color-text-primary); font-family: var(--font-heading); font-size: 1.125rem; }
+
+.requestCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: var(--space-2) var(--space-5);
+  background-color: var(--color-surface-contrast);
+  text-decoration: none;
+  border-radius: 1px;
+  transition: background-color var(--motion-standard) var(--ease-default);
+}
+.requestCta :global(span) { color: var(--color-text-on-contrast); letter-spacing: 0.04em; }
+.requestCta:hover,
+.requestCta:focus-visible { background-color: var(--color-accent-strong); }
+
+.clear {
+  align-self: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: var(--space-1);
+  transition: color var(--motion-micro) var(--ease-default);
+}
+.clear:hover,
+.clear:focus-visible { color: var(--color-accent); }

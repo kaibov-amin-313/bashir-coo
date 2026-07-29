@@ -1,0 +1,8 @@
+/* Homepage v1 nav visibility: the page-level mark hides via visibility
+   (not unmounting — the always-mounted focus-restoration architecture
+   from the Phase 4 fix is preserved; see NavSystem.tsx). visibility also
+   removes it from the a11y tree and tab order, with `inert` applied as
+   well for explicit semantics. */
+.markHidden {
+  visibility: hidden;
+}

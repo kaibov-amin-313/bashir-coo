@@ -1,0 +1,214 @@
+/* Catalog page — reference-driven: breadcrumbs, subcategory band,
+   centered serif title, count/divider row, large photo cards. */
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-7) var(--space-4);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+.crumbLink { color: var(--color-text-secondary); text-decoration: none; opacity: 0.85; }
+.crumbLink:hover { opacity: 1; color: var(--color-accent); }
+.crumbSep { color: var(--color-text-muted); }
+.crumbCurrent { color: var(--color-text-primary); }
+
+/* Subcategory row on a light band. */
+.subcatBand {
+  background-color: var(--color-surface-secondary);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+.subcatRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-6);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+.subcat {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: var(--space-2) 0;
+  min-height: 44px;
+  opacity: 0.72;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.subcat:hover { opacity: 1; }
+.subcatActive { opacity: 1; }
+.subcatActive::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 8px;
+  height: 1px;
+  background-color: var(--color-accent);
+}
+
+/* Centered serif title. */
+.titleBlock {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8) var(--space-6) var(--space-3);
+}
+
+/* Count row + divider (no filters / no sort). */
+.countRow {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 var(--space-7) var(--space-3);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 1px solid var(--color-border);
+}
+.count { color: var(--color-text-muted); text-transform: uppercase; }
+
+/* Grid of large photo cards. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6) var(--space-5);
+  padding: var(--space-6) var(--space-7) var(--space-8);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+  background-color: var(--color-surface-secondary);
+  border-top: 2px solid var(--color-accent);
+}
+.closing > p { max-width: 30ch; }
+.closingCta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: var(--space-2) var(--space-5);
+  background-color: var(--color-surface-contrast);
+  text-decoration: none;
+  border-radius: 1px;
+  transition: background-color var(--motion-standard) var(--ease-default);
+}
+.closingCta :global(span) { color: var(--color-text-on-contrast); }
+.closingCta:hover, .closingCta:focus-visible { background-color: var(--color-accent-strong); }
+
+@media (max-width: 1023px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 599px) {
+  .breadcrumbs, .countRow { padding-left: var(--space-3); padding-right: var(--space-3); }
+  /* Two columns on phones, not one. A single 3:4 card per row filled almost
+     the whole viewport — you saw one object at a time and scrolled forever.
+     Two-up reads as a gallery wall and matches how Loro Piana / Net-a-Porter
+     present a catalogue on mobile. Tighter gap and edge padding suit the
+     narrower cells. */
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4) var(--space-2);
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-6);
+  }
+  .subcatRow { gap: var(--space-3); justify-content: flex-start; overflow-x: auto; }
+}
+
+
+/* ---- Filter bar: count left, Filters button right ---- */
+.filterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-7);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Pin the filter bar to the top only on narrower screens — this is the
+   mobile pattern from the reference, where Filters/Sort stay in reach as
+   the grid scrolls. On desktop the bar stays in normal flow so its
+   centred max-width content isn't stranded against a full-bleed pinned
+   background. Opaque surface + z-index so cards never show through. */
+@media (max-width: 1023px) {
+  .filterBar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: var(--color-surface-primary);
+    box-shadow: 0 1px 0 var(--color-border);
+  }
+}
+
+.filterButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-1) 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-accent);
+  font: inherit;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+.filterButton:hover,
+.filterButton:focus-visible { opacity: 0.75; }
+
+/* Three sliders, as on the reference. */
+.filterIcon {
+  position: relative;
+  width: 16px;
+  height: 12px;
+  flex: none;
+}
+.filterIcon::before,
+.filterIcon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: currentColor;
+}
+.filterIcon::before { top: 2px; }
+.filterIcon::after { bottom: 2px; }
+
+.filterBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: var(--color-surface-primary);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+@media (max-width: 599px) {
+  .filterBar { padding-left: var(--space-3); padding-right: var(--space-3); }
+}

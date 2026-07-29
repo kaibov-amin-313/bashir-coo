@@ -1,0 +1,36 @@
+.main {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  text-align: center;
+  padding: var(--space-4);
+  background-color: var(--color-surface-primary);
+}
+
+.statement {
+  font-size: var(--type-section-statement-size);
+  line-height: var(--type-section-statement-line-height);
+  letter-spacing: var(--type-section-statement-tracking);
+  font-weight: var(--type-section-statement-weight);
+  color: var(--color-text-primary);
+}
+
+.link {
+  font-size: var(--type-cta-size);
+  line-height: var(--type-cta-line-height);
+  letter-spacing: var(--type-cta-tracking);
+  font-weight: var(--type-cta-weight);
+  color: var(--color-text-secondary);
+  border-bottom: var(--border-hairline) solid var(--color-border);
+  padding-bottom: 2px;
+  transition: opacity var(--motion-micro) var(--ease-default);
+  opacity: 0.9;
+}
+
+.link:hover,
+.link:focus-visible {
+  opacity: 1;
+}

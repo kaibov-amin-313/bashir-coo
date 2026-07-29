@@ -1,0 +1,23 @@
+.switcher {
+  position: fixed;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: var(--z-sticky-nav-mark);
+  padding: var(--space-2);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+
+.switcher:hover,
+.switcher:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 599px) {
+  .switcher {
+    top: var(--space-2);
+    right: var(--space-2);
+  }
+}

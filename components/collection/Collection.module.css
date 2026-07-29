@@ -1,0 +1,217 @@
+/**
+ * Bashir&Co — Collection page styles.
+ *
+ * Each Collection preview is a full-viewport frame in a vertical
+ * sequence — structurally incapable of forming a grid or card wall
+ * (Design System Ch.9: one dominant preview at a time). The entire
+ * composition is the link target; the title is the only text.
+ */
+
+.sequence {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview {
+  position: relative;
+  display: block;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+}
+
+.previewMedia {
+  position: absolute;
+  inset: 0;
+  transform: scale(1);
+  transition: transform var(--motion-standard) var(--ease-default);
+  will-change: transform;
+}
+
+/* Hover: the documented 1.02–1.03 ceiling, nothing more (Design System
+   Ch.9). Applied to the media layer, not the text. */
+.preview:hover .previewMedia,
+.preview:focus-visible .previewMedia {
+  transform: scale(1.025);
+}
+
+.previewTitle {
+  position: absolute;
+  left: var(--space-6);
+  bottom: var(--space-7);
+  max-width: 16ch;
+}
+
+.previewAtmosphere {
+  position: absolute;
+  left: var(--space-6);
+  bottom: var(--space-4);
+  max-width: 44ch;
+}
+
+/* ------------------------------------------------------------------ */
+/* A Quieter Way Through — deliberately the least prominent element     */
+/* on the page: standard reveal only, muted register, generous space.  */
+/* ------------------------------------------------------------------ */
+.quieterWay {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-9) var(--space-6);
+  background-color: var(--color-surface-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Special Pieces by Request — near-static, no object media, ever.     */
+/* ------------------------------------------------------------------ */
+.specialPieces {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  background-color: var(--color-surface-tertiary);
+}
+
+.specialPiecesBody {
+  max-width: 65ch;
+}
+
+.quietLink {
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: var(--border-hairline) solid var(--color-border);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity var(--motion-micro) var(--ease-default);
+  align-self: flex-start;
+}
+
+.quietLink:hover,
+.quietLink:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 599px) {
+  .previewTitle {
+    left: var(--space-3);
+    bottom: var(--space-7);
+  }
+
+  .previewAtmosphere {
+    left: var(--space-3);
+    bottom: var(--space-3);
+    max-width: none;
+    right: var(--space-3);
+  }
+
+  .quieterWay,
+  .specialPieces {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Opening frame — the page's or Collection's first held statement.    */
+/* ------------------------------------------------------------------ */
+.openingFrame {
+  min-height: 70vh;
+  min-height: 70dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6) var(--space-7);
+  background-color: var(--color-surface-primary);
+}
+
+.openingAtmosphere {
+  max-width: 52ch;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category rooms — scoped sections inside one Collection. The label   */
+/* is deliberately the quietest text on the page: Metadata register,   */
+/* plain text, never a heading competing with piece titles, never a    */
+/* chip/tag/link (Design System Ch.10).                                */
+/* ------------------------------------------------------------------ */
+.room {
+  display: flex;
+  flex-direction: column;
+}
+
+.roomLabel {
+  padding: var(--space-7) var(--space-6) 0;
+}
+
+@media (max-width: 599px) {
+  .openingFrame {
+    padding: var(--space-8) var(--space-3) var(--space-6);
+  }
+
+  .roomLabel {
+    padding: var(--space-6) var(--space-3) 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Page hero with large image (catalog / about / sourcing pages)       */
+/* ------------------------------------------------------------------ */
+.openingHero {
+  position: relative;
+  min-height: 58vh;
+  min-height: 58dvh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.openingHeroImage {
+  position: absolute;
+  inset: 0;
+}
+
+.openingHeroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(44, 40, 35, 0.6),
+    rgba(44, 40, 35, 0.15) 45%,
+    rgba(44, 40, 35, 0.08) 100%
+  );
+  pointer-events: none;
+}
+
+.openingHeroText {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  max-width: 46ch;
+  color: var(--color-text-on-contrast);
+}
+
+.openingHeroText :global(*) {
+  color: var(--color-text-on-contrast);
+}
+
+.openingHeroAtmosphere {
+  max-width: 44ch;
+}
+
+@media (max-width: 599px) {
+  .openingHero {
+    min-height: 48vh;
+  }
+  .openingHeroText {
+    padding: var(--space-6) var(--space-3);
+  }
+}

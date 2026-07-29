@@ -1,0 +1,45 @@
+/**
+ * Bashir&Co — Global stylesheet entry point.
+ *
+ * Import order matters: tokens first, so every custom property exists
+ * before the reset references them.
+ */
+@import "../tokens/tokens.css";
+@import "../styles/reset.css";
+
+/* Cormorant — self-hosted variable serif for headings (≈ Times Now Semi
+   Light). Variable weight axis 300–700; used via --font-heading. */
+@font-face {
+  font-family: "Cormorant";
+  src: url("/fonts/Cormorant-var.ttf") format("truetype-variations");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant";
+  src: url("/fonts/Cormorant-Italic-var.ttf") format("truetype-variations");
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Metric-matched fallback for Cormorant. During the swap window the
+   browser paints "Cormorant Fallback" (Georgia, size-adjusted) at nearly
+   the same width and cap-height as the real face, so when Cormorant
+   finishes loading the hero headline settles into place instead of
+   visibly jumping. size-adjust/ascent/descent are tuned to Cormorant's
+   metrics against Georgia — the single most-visible first-paint fix.
+   Consumed via --font-heading below, which lists this ahead of the bare
+   system serif. */
+@font-face {
+  font-family: "Cormorant Fallback";
+  src: local("Georgia"), local("Times New Roman");
+  font-weight: 300 700;
+  font-style: normal;
+  size-adjust: 92%;
+  ascent-override: 100%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+}
+

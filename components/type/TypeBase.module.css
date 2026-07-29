@@ -1,0 +1,207 @@
+/**
+ * Bashir&Co — Type.Base styles.
+ *
+ * Every value below is a reference to an existing custom property in
+ * `/tokens/tokens.css` — nothing here is a hardcoded px/hex value.
+ * `navItem` and `ctaText` intentionally reference the `--type-nav-*` and
+ * `--type-cta-*` properties respectively (see `type.types.ts`'s header
+ * note) — this is the one place that naming difference is resolved.
+ *
+ * Color is not a Design System "typography token" attribute, but the
+ * Design System's own three-tier text-color system (primary / secondary
+ * / muted) implies a sensible default per variant, applied here:
+ * headline/reading variants → primary (or primary-max for the two most
+ * significant, per Design System Ch.2); section statements and form
+ * labels → secondary; captions, metadata, and legal → muted. Any of
+ * these can still be overridden via `className` where a specific context
+ * genuinely needs it (e.g. a hover state elsewhere).
+ */
+
+.base {
+  margin: 0;
+  /* Type.Base always renders fully visible, resting-state text. It does
+     not animate itself and never starts hidden waiting for JS — a future
+     Phase 6 GSAP timeline animates FROM a hidden/blurred state INTO this
+     resting state as a progressive enhancement. Text must be fully
+     correct and visible with zero JavaScript. */
+}
+
+.alignLeft {
+  text-align: left;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignRight {
+  text-align: right;
+}
+
+/* ------------------------------------------------------------------ */
+/* Wordmark                                                            */
+/* ------------------------------------------------------------------ */
+.wordmark {
+  font-size: var(--type-wordmark-size);
+  line-height: var(--type-wordmark-line-height);
+  letter-spacing: var(--type-wordmark-tracking);
+  font-weight: var(--type-wordmark-weight);
+  color: var(--color-text-primary-max);
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero headline                                                       */
+/* ------------------------------------------------------------------ */
+.heroHeadline {
+  font-family: var(--font-heading);
+  font-size: var(--type-hero-headline-size);
+  line-height: var(--type-hero-headline-line-height);
+  letter-spacing: var(--type-hero-headline-tracking);
+  font-weight: var(--type-hero-headline-weight);
+  color: var(--color-text-primary-max);
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ */
+/* Act title                                                            */
+/* ------------------------------------------------------------------ */
+.actTitle {
+  font-family: var(--font-heading);
+  font-size: var(--type-act-title-size);
+  line-height: var(--type-act-title-line-height);
+  letter-spacing: var(--type-act-title-tracking);
+  font-weight: var(--type-act-title-weight);
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ */
+/* Section statement                                                    */
+/* ------------------------------------------------------------------ */
+.sectionStatement {
+  font-family: var(--font-heading);
+  font-size: var(--type-section-statement-size);
+  line-height: var(--type-section-statement-line-height);
+  letter-spacing: var(--type-section-statement-tracking);
+  font-weight: var(--type-section-statement-weight);
+  color: var(--color-text-secondary);
+  max-width: 42ch;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------ */
+/* Collection title                                                    */
+/* ------------------------------------------------------------------ */
+.collectionTitle {
+  font-family: var(--font-heading);
+  font-size: var(--type-collection-title-size);
+  line-height: var(--type-collection-title-line-height);
+  letter-spacing: var(--type-collection-title-tracking);
+  font-weight: var(--type-collection-title-weight);
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ */
+/* Object title                                                        */
+/* ------------------------------------------------------------------ */
+.objectTitle {
+  font-family: var(--font-heading);
+  font-size: var(--type-object-title-size);
+  line-height: var(--type-object-title-line-height);
+  letter-spacing: var(--type-object-title-tracking);
+  font-weight: var(--type-object-title-weight);
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ */
+/* Provenance                                                          */
+/* ------------------------------------------------------------------ */
+.provenance {
+  font-size: var(--type-provenance-size);
+  line-height: var(--type-provenance-line-height);
+  letter-spacing: var(--type-provenance-tracking);
+  font-weight: var(--type-provenance-weight);
+  color: var(--color-text-primary);
+  max-width: 65ch; /* Design System Ch.3/Ch.5: 60–75 character measure */
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------ */
+/* Body                                                                */
+/* ------------------------------------------------------------------ */
+.body {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line-height);
+  letter-spacing: var(--type-body-tracking);
+  font-weight: var(--type-body-weight);
+  color: var(--color-text-primary);
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+
+/* ------------------------------------------------------------------ */
+/* Caption                                                              */
+/* ------------------------------------------------------------------ */
+.caption {
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line-height);
+  letter-spacing: var(--type-caption-tracking);
+  font-weight: var(--type-caption-weight);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Metadata — the one variant with uppercase, per Design System Ch.3    */
+/* ------------------------------------------------------------------ */
+.metadata {
+  font-size: var(--type-metadata-size);
+  line-height: var(--type-metadata-line-height);
+  letter-spacing: var(--type-metadata-tracking);
+  font-weight: var(--type-metadata-weight);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Nav item — references the existing --type-nav-* properties          */
+/* ------------------------------------------------------------------ */
+.navItem {
+  font-size: var(--type-nav-size);
+  line-height: var(--type-nav-line-height);
+  letter-spacing: var(--type-nav-tracking);
+  font-weight: var(--type-nav-weight);
+  color: var(--color-text-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Form label                                                          */
+/* ------------------------------------------------------------------ */
+.formLabel {
+  font-size: var(--type-form-label-size);
+  line-height: var(--type-form-label-line-height);
+  letter-spacing: var(--type-form-label-tracking);
+  font-weight: var(--type-form-label-weight);
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------------------ */
+/* CTA text — references the existing --type-cta-* properties          */
+/* ------------------------------------------------------------------ */
+.ctaText {
+  font-size: var(--type-cta-size);
+  line-height: var(--type-cta-line-height);
+  letter-spacing: var(--type-cta-tracking);
+  font-weight: var(--type-cta-weight);
+  color: var(--color-text-primary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Legal                                                                */
+/* ------------------------------------------------------------------ */
+.legal {
+  font-size: var(--type-legal-size);
+  line-height: var(--type-legal-line-height);
+  letter-spacing: var(--type-legal-tracking);
+  font-weight: var(--type-legal-weight);
+  color: var(--color-text-muted);
+}

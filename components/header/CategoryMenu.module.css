@@ -1,0 +1,209 @@
+/**
+ * Bashir&Co — the "Подборка" dropdown (Loro Piana structure).
+ *
+ * A near-full-height cream sheet: a column of categories at the left,
+ * separated by a hairline, and a large photograph at the right with a
+ * white caption card resting over its lower edge. A close button sits in
+ * the top-right, so the panel can be dismissed deliberately rather than
+ * only by moving the mouse away.
+ */
+
+.panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background-color: var(--color-surface-primary);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 30px 60px -40px rgba(38, 34, 32, 0.35);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 320ms var(--ease-default),
+    transform 320ms var(--ease-default),
+    visibility 0s linear 320ms;
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+.inner {
+  position: relative;
+  display: grid;
+  /* The list is narrow; the photograph gets the room. Cream emptiness
+     between them is deliberate — it's what makes the panel read as a
+     room rather than a menu. */
+  grid-template-columns: minmax(280px, 22%) 1fr;
+  min-height: 60vh;
+}
+
+/* ---- Close button, top-right ---- */
+.close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-5);
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--color-text-primary) 55%, transparent);
+  color: var(--color-surface-primary);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--motion-micro) var(--ease-default);
+}
+.close:hover,
+.close:focus-visible {
+  background-color: var(--color-text-primary);
+}
+
+/* ---- Left: the category column ---- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-6) var(--space-5) var(--space-6) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  /* The hairline that separates the list from the photograph. */
+  border-right: 1px solid var(--color-border);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding: var(--space-3) 0;
+  min-height: 52px;
+  opacity: 0.82;
+  transition:
+    opacity var(--motion-micro) var(--ease-default),
+    color var(--motion-micro) var(--ease-default);
+}
+
+/* The chevron, as on the reference — it says "there's more through here". */
+.item::after {
+  content: "›";
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  transition:
+    transform var(--motion-standard) var(--ease-default),
+    color var(--motion-micro) var(--ease-default);
+}
+
+.item:hover,
+.item:focus-visible,
+.itemActive {
+  opacity: 1;
+  color: var(--color-accent);
+}
+.item:hover::after,
+.item:focus-visible::after,
+.itemActive::after {
+  color: var(--color-accent);
+  transform: translateX(3px);
+}
+
+.allRow {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.allLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.allLink::before,
+.allLink::after {
+  content: "–";
+  color: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* ---- Right: the photograph ---- */
+.previewPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.previewLink {
+  position: relative;
+  display: block;
+  width: min(100%, 420px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.previewMedia {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: var(--color-surface-secondary);
+}
+.previewMedia :global(img) {
+  transition: opacity 400ms var(--ease-default);
+}
+
+/* The white card resting over the photograph's lower edge — caption and
+   link, exactly as the reference does it. */
+.previewCaption {
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  transform: translateX(-50%);
+  width: min(78%, 260px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-3);
+  background-color: var(--color-surface-primary);
+  text-align: center;
+}
+
+.previewTitle {
+  color: var(--color-text-primary);
+}
+
+.previewCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-accent);
+}
+.previewCta::before,
+.previewCta::after {
+  content: "–";
+  color: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* Desktop affordance only — on touch the mobile menu already lists
+   everything, and a hover panel there would be a trap. */
+@media (max-width: 899px) {
+  .panel { display: none; }
+}

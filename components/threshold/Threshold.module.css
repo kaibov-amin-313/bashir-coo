@@ -1,0 +1,47 @@
+/**
+ * Bashir&Co — Threshold styles.
+ *
+ * The light source is CSS-generated for this phase (no final asset yet
+ * — see `ThresholdLightReveal.tsx`'s header comment). Deliberately NOT a
+ * centered, high-contrast radial gradient — that reads as the generic
+ * "luxury hero gradient" trope this system explicitly forbids. This one
+ * is off-center, very low opacity even at its brightest, monochromatic
+ * (white only, at low alpha — no color, no gold, no champagne), and
+ * large/soft rather than a tight spotlight, so it reads as ambient light
+ * filling part of a dark room rather than a decorative background effect.
+ */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-threshold-top-layer);
+  background-color: var(--color-surface-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 55% 45% at 62% 38%,
+    rgba(255, 255, 255, 0.16),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.wordmark {
+  position: relative;
+  opacity: 0;
+}
+
+.line {
+  position: relative;
+  opacity: 0;
+}

@@ -1,0 +1,6 @@
+/* The mark inherits its colour from the parent — currentColor does the
+   rest, so the same component works on cream and over photography. */
+.mark {
+  width: auto;
+  display: block;
+}

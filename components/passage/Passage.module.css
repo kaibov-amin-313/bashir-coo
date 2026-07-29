@@ -1,0 +1,128 @@
+/**
+ * Bashir&Co — Passage styles.
+ *
+ * One object per viewport, alternating left/right-third anchors on
+ * desktop (Design System Ch.5), collapsing to full-width stacked on
+ * mobile. Provenance holds the 60–75ch measure via Type.Base's own
+ * `.provenance` class; layout here only positions it.
+ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-8) 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-6);
+}
+
+.macro {
+  height: 80vh;
+  height: 80dvh;
+  position: relative;
+  overflow: hidden;
+  /* Full-bleed during the macro passage, per Design System Ch.11. */
+}
+
+.macro > * {
+  position: absolute;
+  inset: 0;
+}
+
+.objectRow {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  padding: 0 var(--space-6);
+  min-height: 80vh;
+  min-height: 80dvh;
+}
+
+.anchorLeft .objectMedia {
+  grid-column: 1 / 6;
+}
+.anchorLeft .objectText {
+  grid-column: 8 / 13;
+}
+
+.anchorRight .objectMedia {
+  grid-column: 8 / 13;
+}
+.anchorRight .objectText {
+  grid-column: 1 / 6;
+  grid-row: 1;
+}
+
+.objectMedia {
+  aspect-ratio: 4 / 5;
+  max-height: 68vh;
+  position: relative;
+  overflow: hidden;
+  /* Contained media on a same-toned ground gets the system's one
+     shadow — the inset media edge (Design System Ch.11). */
+  box-shadow: var(--shadow-media-edge);
+}
+
+.objectMedia > * {
+  position: absolute;
+  inset: 0;
+}
+
+.objectText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.inquiry {
+  /* Nested inside .objectText — inherits the row's padding; none of
+     its own. */
+}
+
+/* The inquiry line: a quiet text element, never a filled button
+   (Design System Ch.7's secondary tier). Non-interactive in v1 — no
+   Contact page exists yet; a dead link would be worse than a held line. */
+.inquiryLine {
+  display: inline-block;
+  padding-bottom: 2px;
+  border-bottom: var(--border-hairline) solid var(--color-text-secondary);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+
+.inquiryLine:hover,
+.inquiryLine:focus-visible {
+  opacity: 1;
+}
+
+@media (max-width: 599px) {
+  .header {
+    padding: 0 var(--space-3);
+  }
+
+  .objectRow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    padding: 0 var(--space-3);
+    min-height: auto;
+  }
+
+  .objectMedia {
+    max-height: 55vh;
+  }
+}
+
+.fillSlot {
+  position: absolute;
+  inset: 0;
+}

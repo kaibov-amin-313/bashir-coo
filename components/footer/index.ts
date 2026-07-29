@@ -1,0 +1,1 @@
+export { FooterRoot } from "./FooterRoot";

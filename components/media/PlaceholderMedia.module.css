@@ -1,0 +1,103 @@
+/**
+ * Bashir&Co — PlaceholderMedia: NEUTRAL editorial photo-frames.
+ *
+ * Deliberately NOT fake objects. Like the reference grey product frames,
+ * the elegance is in restraint: a calm graded tonal ground, one soft
+ * directional light, a faint centered material vignette, and a small
+ * uppercase label naming what photo belongs here. Reads as "photograph
+ * pending", never as lava-lamp render art. Real photos replace these 1:1.
+ *
+ * Family classes only vary the ground TONE + label, not shapes.
+ */
+
+.base {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 38%, rgba(255,252,246,0.7), transparent 70%),
+    linear-gradient(160deg, #f1ebdf 0%, #e9e1d2 55%, #e2d8c6 100%);
+}
+
+/* Fine grain. */
+.base::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--surface-grain);
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Soft central material vignette — the only "object" hint, very subtle. */
+.base::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: 58%;
+  height: 62%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 42%,
+    rgba(120, 100, 76, 0.08),
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+/* The label layer — small uppercase, centered, taupe. */
+.object {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(93, 83, 71, 0.5);
+  padding: 6px 2px;
+  border-top: 1px solid rgba(124, 74, 67, 0.35);
+  border-bottom: 1px solid rgba(124, 74, 67, 0.35);
+}
+
+/* hide the old handle span entirely */
+.handle { display: none; }
+
+/* ---- Tonal families: only shift the ground warmth slightly. ---- */
+.watch  { }
+.clothing { }
+.leather  { --ph-tone: 1; }
+.bag { }
+.jewelry {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,253,248,0.85), transparent 72%),
+    linear-gradient(160deg, #efe8db 0%, #e6dccb 100%);
+}
+.stone {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 40%, rgba(255,252,246,0.6), transparent 70%),
+    linear-gradient(160deg, #ece4d5 0%, #e0d5c1 100%);
+}
+.interior {
+  background:
+    linear-gradient(108deg, rgba(255,251,243,0.55), transparent 52%),
+    linear-gradient(to bottom, #efe8da 0%, #e6dccb 56%, #dccfb8 100%);
+}
+.editorial {
+  background:
+    linear-gradient(112deg, rgba(255,251,243,0.5), transparent 48%),
+    linear-gradient(to bottom, #efe7d8 0%, #e6dbc9 52%, #dccfb8 100%);
+}
+
+/* singularColor / temperature: no-ops kept for API compatibility */
+.singularColor {}
+.roomWarm {}
+.roomCool {}

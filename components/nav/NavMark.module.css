@@ -1,0 +1,38 @@
+/**
+ * Bashir&Co — Nav.Mark styles.
+ *
+ * Hit area: the wordmark text itself is small (per its type token), so
+ * `--space-2` (16px) padding on all sides is what brings the button's
+ * actual tap target comfortably past the 44px accessibility floor —
+ * roughly 24px (text) + 16px + 16px ≈ 56px — using an existing spacing
+ * token rather than a new hardcoded value.
+ */
+
+.mark {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-sticky-nav-mark);
+  padding: var(--space-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.9; /* resting, within Design System's 88–92% band */
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+
+.mark:hover,
+.mark:focus-visible {
+  opacity: 1;
+}
+
+.mark:active {
+  opacity: 0.75; /* within Design System's 70–80% active band */
+}
+
+@media (max-width: 599px) {
+  .mark {
+    top: var(--space-2);
+    left: var(--space-2);
+  }
+}

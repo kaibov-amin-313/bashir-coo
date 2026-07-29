@@ -1,0 +1,27 @@
+.thread {
+  position: fixed;
+  bottom: var(--space-3);
+  right: var(--space-3);
+  z-index: var(--z-sticky-nav-mark);
+  padding: var(--space-2);
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9; /* resting, within Design System's 88–92% band */
+  transition: opacity var(--motion-micro) var(--ease-default);
+}
+
+.thread:hover,
+.thread:focus-visible {
+  opacity: 1;
+}
+
+.thread.warmed {
+  opacity: 0.94; /* a small, undisclosed nudge — see Motion Bible Ch.9 */
+}
+
+@media (max-width: 599px) {
+  .thread {
+    bottom: var(--space-2);
+    right: var(--space-2);
+  }
+}

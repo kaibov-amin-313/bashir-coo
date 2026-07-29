@@ -1,0 +1,116 @@
+/* Card with Loro Piana-style hover: pill at rest, white detail card
+   slides up on hover. */
+.card { display: flex; flex-direction: column; height: 100%; position: relative; }
+.mediaLink { display: block; text-decoration: none; color: inherit; }
+
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: var(--color-surface-secondary);
+}
+.media > :global(.slot) { transition: transform 900ms var(--ease-default); }
+.card:hover .media > :global(.slot) { transform: scale(1.04); }
+
+/* At-rest category pill, top-left; fades out on hover. */
+.pill {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-surface-primary) 88%, transparent);
+  backdrop-filter: blur(4px);
+  color: var(--color-text-primary);
+  opacity: 1;
+  transition: opacity var(--motion-standard) var(--ease-default);
+}
+.card:hover .pill { opacity: 0; }
+
+/* Hover detail card — slides up from bottom over the photo. */
+.hoverCard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+  padding: var(--space-4) var(--space-3);
+  background-color: color-mix(in srgb, var(--color-surface-primary) 96%, transparent);
+  backdrop-filter: blur(6px);
+  transform: translateY(101%);
+  opacity: 0;
+  transition:
+    transform var(--motion-slow, 520ms) var(--ease-default),
+    opacity var(--motion-standard) var(--ease-default);
+}
+.card:hover .hoverCard,
+.mediaLink:focus-visible .hoverCard {
+  transform: translateY(0);
+  opacity: 1;
+}
+.hoverCategory { color: var(--color-accent); text-transform: uppercase; }
+.hoverCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-accent);
+}
+.hoverCta::after {
+  content: "→";
+  color: var(--color-accent);
+}
+
+/* Below-image label, always visible. */
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+  padding: var(--space-3) 0 0;
+}
+.material { color: var(--color-accent); text-transform: uppercase; }
+
+/* Touch-only request CTA below the label. Hidden by default (hover
+   devices get the CTA inside the slide-up card); revealed only where
+   there is no hover. */
+.bodyCta {
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-accent);
+}
+.bodyCta :global(span) { color: var(--color-accent); }
+.bodyCta::after {
+  content: "→";
+  color: var(--color-accent);
+}
+@media (hover: none) {
+  .bodyCta { display: inline-flex; }
+}
+
+/* Touch devices: there is no hover, so the slide-up detail card can never
+   be triggered — and forcing it into the flow (as before) duplicated the
+   title and dumped a stray white panel between the photo and the label.
+   Instead we hide the hover card entirely on touch and show the pill; the
+   name lives in .body below the photo, and the "Оставить запрос" CTA is
+   rendered there too (see .bodyCta), so nothing is lost and nothing is
+   doubled. */
+@media (hover: none) {
+  .card:hover .pill { opacity: 1; }
+  .hoverCard { display: none; }
+}

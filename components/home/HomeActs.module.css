@@ -1,0 +1,235 @@
+/**
+ * Bashir&Co — Homepage Act layout styles (v1).
+ *
+ * Register assignment per Design System Ch.2: Acts I–III deepest,
+ * Act IV standard dark, Acts V–VI warm charcoal. The Threshold Door
+ * motif carrying these register shifts is a later polish phase — v1
+ * expresses the registers through each section's own background.
+ *
+ * Negative-space and anchor rules per Design System Ch.4–5: Act I holds
+ * 60–70% empty frame; Act IV objects anchor left/right-third on desktop,
+ * collapsing to full-width isolated on mobile.
+ */
+
+/* ------------------------------------------------------------------ */
+/* Act I — type only, deepest register                                  */
+/* ------------------------------------------------------------------ */
+.actI {
+  /* Deliberately UNTOUCHED by the Visual Atmosphere Pass: Act I's true,
+     flat black is its composition — 60-70% negative space around one
+     line of type (Homepage Film Script Ch.4). Depth here would be a
+     regression, not an improvement. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: var(--color-surface-primary);
+  padding: var(--space-7) var(--space-6);
+}
+
+.actIHeadline {
+  max-width: 14ch;
+}
+
+@media (max-width: 599px) {
+  .actI {
+    padding: var(--space-6) var(--space-3);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Act II — time surface; tall scroll range for the scrub               */
+/* ------------------------------------------------------------------ */
+.actII {
+  position: relative;
+  background-color: var(--color-surface-primary);
+}
+
+.actIIStage {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.actIIMedia {
+  position: absolute;
+  inset: 0;
+}
+
+/* The moving light — the Act's own animated child, scrubbed by GSAP.
+   Starts left-of-frame; the scrub carries it across the surface. */
+.actIILight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 45% 60% at 20% 55%,
+    rgba(255, 255, 255, 0.13),
+    transparent 65%
+  );
+  will-change: transform;
+  pointer-events: none;
+}
+
+.actIILine {
+  position: absolute;
+  bottom: var(--space-7);
+  left: var(--space-6);
+  max-width: 30ch;
+}
+
+@media (max-width: 599px) {
+  .actIILine {
+    left: var(--space-3);
+    bottom: var(--space-6);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Act III — sequential macro beats, deepest register                   */
+/* ------------------------------------------------------------------ */
+.actIII {
+  background-color: var(--color-surface-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.actIIIBeat {
+  height: 88vh;
+  height: 88dvh;
+  position: relative;
+  overflow: hidden;
+  /* Full-bleed during the macro sequence, per Design System Ch.11. */
+}
+
+.actIIIBeat > * {
+  position: absolute;
+  inset: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Act IV — one object at a time, standard dark register               */
+/* ------------------------------------------------------------------ */
+.actIV {
+  background:
+    radial-gradient(
+      ellipse 100% 60% at 50% 0%,
+      rgba(255, 255, 255, 0.035),
+      transparent 60%
+    ),
+    linear-gradient(to top, rgba(0, 0, 0, 0.35), transparent 30%),
+    var(--color-surface-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-8) 0;
+}
+
+.actIVObject {
+  min-height: 90vh;
+  min-height: 90dvh;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+  padding: 0 var(--space-6);
+}
+
+/* Left-third anchor: object cols 1–5, title opposite. */
+.actIVObject.anchorLeft .actIVMedia {
+  grid-column: 1 / 6;
+}
+.actIVObject.anchorLeft .actIVTitle {
+  grid-column: 8 / 13;
+}
+
+/* Right-third anchor: object cols 8–12, title opposite. */
+.actIVObject.anchorRight .actIVMedia {
+  grid-column: 8 / 13;
+}
+.actIVObject.anchorRight .actIVTitle {
+  grid-column: 1 / 6;
+  grid-row: 1;
+}
+
+.actIVMedia {
+  aspect-ratio: 4 / 5;
+  max-height: 70vh;
+  box-shadow: var(--shadow-media-edge);
+}
+
+@media (max-width: 599px) {
+  .actIVObject {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+    padding: 0 var(--space-3);
+  }
+
+  .actIVMedia {
+    max-height: 55vh;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Act V — concierge, warm register                                    */
+/* ------------------------------------------------------------------ */
+.actV {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-surface-tertiary);
+  display: flex;
+  align-items: center;
+  padding: var(--space-7) var(--space-6);
+  overflow: hidden;
+}
+
+.actVAtmosphere {
+  position: absolute;
+  inset: 0;
+}
+
+.actVLine {
+  position: relative;
+  max-width: 34ch;
+}
+
+@media (max-width: 599px) {
+  .actV {
+    padding: var(--space-6) var(--space-3);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Act VI — contact resolution, warm register                          */
+/* ------------------------------------------------------------------ */
+.actVI {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-surface-tertiary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+  overflow: hidden;
+}
+
+.actVIAtmosphere {
+  position: absolute;
+  inset: 0;
+}
+
+.actVIContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}

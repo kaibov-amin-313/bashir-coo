@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TypeBase } from "@/components/type";
 import { MediaSlot } from "@/components/media";
 import { AddToCartButton } from "@/components/cart";
+import { formatUsd } from "@/lib/price";
 import { routes, PIECE_QUERY_PARAM } from "@/config/routes";
 import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
@@ -68,6 +69,7 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
           title: piece.title,
           image: piece.image,
           priceLabel: piece.priceLabel,
+          priceUsd: piece.priceUsd,
           category: categoryLabel,
           visualVariant: piece.visualVariant,
         }}
@@ -78,6 +80,16 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
         <TypeBase variant="objectTitle" as="h3">{piece.title}</TypeBase>
         <span className={styles.material}>
           <TypeBase variant="metadata" as="span">{categoryLabel}</TypeBase>
+        </span>
+        {/* Price in USD. Falls back to the piece's "on request" wording
+            when no numeric price is set, so an unpriced commission reads
+            deliberately rather than as a missing value. */}
+        <span className={styles.price}>
+          <TypeBase variant="body" as="span">
+            {piece.priceUsd !== null
+              ? formatUsd(piece.priceUsd, locale)
+              : piece.priceLabel}
+          </TypeBase>
         </span>
         {/* Touch-only CTA: on hover devices the request link lives inside the
             slide-up hover card; on touch there is no hover, so it surfaces

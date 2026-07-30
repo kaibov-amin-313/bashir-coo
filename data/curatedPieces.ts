@@ -35,7 +35,16 @@ export interface CuratedPiece {
   gender: Gender;
   title: LocalizedText;
   status: LocalizedText;
+  /** Display wording used when there is no numeric price. */
   priceLabel: LocalizedText;
+  /**
+   * Numeric price in USD — the single source of truth for anything that
+   * has to add up. `null` means the piece is quoted personally, which is
+   * the honest default for this file: these are real references whose
+   * prices belong to the house, not invented figures. Set the real ones
+   * through the admin.
+   */
+  priceUsd: number | null;
   visualVariant: PlaceholderKind;
   image: string;
   inquirySubject: LocalizedText;
@@ -52,7 +61,8 @@ function piece(
   gender: Gender,
   ru: string,
   en: string,
-  visualVariant: PlaceholderKind
+  visualVariant: PlaceholderKind,
+  priceUsd: number | null = null
 ): CuratedPiece {
   return {
     slug,
@@ -63,6 +73,7 @@ function piece(
     title: { ru, en },
     status: STATUS,
     priceLabel: PRICE,
+    priceUsd,
     visualVariant,
     image: `/images/products/${slug}.jpg`,
     inquirySubject: { ru: `Запрос: ${ru}`, en: `Inquiry: ${en}` },
@@ -213,6 +224,7 @@ export interface LocalizedCuratedPiece {
   title: string;
   status: string;
   priceLabel: string;
+  priceUsd: number | null;
   visualVariant: PlaceholderKind;
   image: string;
   inquirySubject: string;
@@ -228,6 +240,7 @@ export function getCuratedPieces(locale: Locale): LocalizedCuratedPiece[] {
     title: p.title[locale],
     status: p.status[locale],
     priceLabel: p.priceLabel[locale],
+    priceUsd: p.priceUsd,
     visualVariant: p.visualVariant,
     image: p.image,
     inquirySubject: p.inquirySubject[locale],

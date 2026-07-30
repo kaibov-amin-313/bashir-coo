@@ -32,6 +32,7 @@ export async function getPublicPieces(
       title,
       status: locale === "ru" ? "По запросу" : "Available by request",
       priceLabel: price,
+      priceUsd: r.priceUsd,
       visualVariant: r.visualVariant,
       image: r.image,
       inquirySubject:

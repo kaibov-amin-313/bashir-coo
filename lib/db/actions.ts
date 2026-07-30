@@ -1,5 +1,6 @@
 "use server";
 
+import { parseUsdInput } from "@/lib/price";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { put } from "@vercel/blob";
@@ -90,6 +91,8 @@ function readForm(form: FormData): PieceInput {
     descriptionEn: String(form.get("descriptionEn") ?? "").trim() || undefined,
     priceRu: String(form.get("priceRu") ?? "").trim() || "Цена по запросу",
     priceEn: String(form.get("priceEn") ?? "").trim() || "Price on request",
+    // Empty field → null ("quoted on request"), never 0.
+    priceUsd: parseUsdInput(String(form.get("priceUsd") ?? "")),
     image: String(form.get("image") ?? "").trim(),
     visualVariant: (String(
       form.get("visualVariant") ?? "productStill"

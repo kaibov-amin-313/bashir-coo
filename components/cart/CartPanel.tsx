@@ -6,6 +6,7 @@ import { MediaSlot } from "@/components/media";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useCart } from "@/store/CartContext";
 import { whatsappLink } from "@/lib/contacts";
+import { formatUsd, sumUsd, priceOnRequestLabel } from "@/lib/price";
 import type { Locale } from "@/lib/i18n";
 import styles from "./CartPanel.module.css";
 
@@ -19,8 +20,10 @@ import styles from "./CartPanel.module.css";
  * the conversation to the concierge — the request stays personal, which
  * is the house's model, rather than routing to a payment flow.
  *
- * Prices are shown as their held label ("Цена по запросу") — no totals
- * are computed, because there are no numeric prices yet.
+ * Prices are shown in USD, the house's trading currency, and the footer
+ * totals them. A piece with no numeric price falls back to its "on
+ * request" wording, and a cart mixing the two says so rather than
+ * quietly presenting a partial sum as the whole.
  */
 
 interface CartPanelProps {
@@ -44,6 +47,13 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
 
   const t = (ru: string, en: string) => (locale === "ru" ? ru : en);
 
+  // Sum of the priced lines. `null` when nothing in the cart carries a
+  // price, so an all-on-request cart shows the wording, not "$0".
+  const total = sumUsd(lines);
+  // Some pieces may be quoted personally; if the cart mixes priced and
+  // unpriced items the total is only part of the story, and says so.
+  const hasUnpriced = lines.some((l) => l.priceUsd === null);
+
   // Build the concierge message: a titled list of everything gathered.
   const requestMessage = (() => {
     const intro = t(
@@ -51,7 +61,12 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
       "Hello! I'm interested in the following pieces:"
     );
     const items = lines
-      .map((l) => `• ${l.title}${l.qty > 1 ? ` ×${l.qty}` : ""}`)
+      .map((l) => {
+        const qty = l.qty > 1 ? ` ×${l.qty}` : "";
+        const price =
+          l.priceUsd !== null ? ` — ${formatUsd(l.priceUsd, locale)}` : "";
+        return `• ${l.title}${qty}${price}`;
+      })
       .join("\n");
     return `${intro}\n${items}`;
   })();
@@ -140,7 +155,11 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
                   </span>
                   <TypeBase variant="objectTitle" as="h3">{line.title}</TypeBase>
                   <span className={styles.linePrice}>
-                    <TypeBase variant="caption" as="span">{line.priceLabel}</TypeBase>
+                    <TypeBase variant="caption" as="span">
+                      {line.priceUsd !== null
+                        ? formatUsd(line.priceUsd, locale)
+                        : line.priceLabel}
+                    </TypeBase>
                   </span>
 
                   <span className={styles.qtyRow}>
@@ -176,9 +195,22 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
             <div className={styles.summaryRow}>
               <span className={styles.summaryLabel}>{t("Итого", "Total")}</span>
               <span className={styles.summaryValue}>
-                {t("По запросу", "On request")}
+                {total !== null
+                  ? formatUsd(total, locale)
+                  : priceOnRequestLabel(locale)}
               </span>
             </div>
+
+            {hasUnpriced ? (
+              <span className={styles.summaryNote}>
+                <TypeBase variant="caption" as="span">
+                  {t(
+                    "Часть позиций — по запросу, итог неполный.",
+                    "Some pieces are quoted on request; the total is partial."
+                  )}
+                </TypeBase>
+              </span>
+            ) : null}
 
             <a
               href={whatsappLink(requestMessage)}

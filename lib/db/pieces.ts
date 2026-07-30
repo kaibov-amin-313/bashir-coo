@@ -48,6 +48,8 @@ export interface PieceRecord {
   descriptionEn: string | null;
   priceRu: string;
   priceEn: string;
+  /** Numeric price in USD; null means "quoted on request". */
+  priceUsd: number | null;
   image: string;
   visualVariant: PlaceholderKind;
   published: boolean;
@@ -109,6 +111,12 @@ export async function ensureSchema(): Promise<void> {
       description_en TEXT,
       price_ru TEXT NOT NULL DEFAULT 'Цена по запросу',
       price_en TEXT NOT NULL DEFAULT 'Price on request',
+      -- The numeric price, in USD, and the single source of truth for
+      -- anything that must add up (cart totals, and later the payment
+      -- step). NULL means "quoted on request" — a real state for one-off
+      -- commissions — and is deliberately not 0. price_ru/price_en stay
+      -- as the display wording used when this is NULL.
+      price_usd NUMERIC(12,2),
       image TEXT NOT NULL DEFAULT '',
       visual_variant TEXT NOT NULL DEFAULT 'productStill',
       published BOOLEAN NOT NULL DEFAULT TRUE,
@@ -121,6 +129,7 @@ export async function ensureSchema(): Promise<void> {
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS subcategory TEXT;`);
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS brand TEXT NOT NULL DEFAULT '';`);
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'unisex';`);
+  await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS price_usd NUMERIC(12,2);`);
 
   await query(`
     CREATE TABLE IF NOT EXISTS admin_users (
@@ -150,6 +159,11 @@ function rowToRecord(r: PieceRow): PieceRecord {
     descriptionEn: (r.description_en as string | null) ?? null,
     priceRu: String(r.price_ru),
     priceEn: String(r.price_en),
+    // pg returns NUMERIC as a string to preserve precision — coerce here
+    // so consumers always see a number or null, never "1250.00".
+    priceUsd: r.price_usd === null || r.price_usd === undefined
+      ? null
+      : Number(r.price_usd),
     image: String(r.image ?? ""),
     visualVariant: r.visual_variant as PlaceholderKind,
     published: Boolean(r.published),
@@ -172,6 +186,7 @@ function fallbackRecords(): PieceRecord[] {
     descriptionEn: null,
     priceRu: p.priceLabel.ru,
     priceEn: p.priceLabel.en,
+    priceUsd: p.priceUsd,
     image: p.image,
     visualVariant: p.visualVariant,
     published: true,
@@ -237,6 +252,7 @@ export interface PieceInput {
   descriptionEn?: string;
   priceRu: string;
   priceEn: string;
+  priceUsd: number | null;
   image: string;
   visualVariant: PlaceholderKind;
   published: boolean;
@@ -248,14 +264,15 @@ export async function createPiece(input: PieceInput): Promise<void> {
   await query(
     `INSERT INTO pieces (
        slug, category, subcategory, brand, gender, title_ru, title_en,
-       description_ru, description_en, price_ru, price_en,
+       description_ru, description_en, price_ru, price_en, price_usd,
        image, visual_variant, published, sort_order
-     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15);`,
+     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16);`,
     [
       input.slug, input.category, input.subcategory, input.brand, input.gender,
       input.titleRu, input.titleEn,
       input.descriptionRu ?? null, input.descriptionEn ?? null,
-      input.priceRu, input.priceEn, input.image, input.visualVariant,
+      input.priceRu, input.priceEn, input.priceUsd,
+      input.image, input.visualVariant,
       input.published, input.sortOrder,
     ]
   );
@@ -268,14 +285,15 @@ export async function updatePiece(id: number, input: PieceInput): Promise<void> 
        slug = $1, category = $2, subcategory = $3, brand = $4, gender = $5,
        title_ru = $6, title_en = $7,
        description_ru = $8, description_en = $9, price_ru = $10,
-       price_en = $11, image = $12, visual_variant = $13,
-       published = $14, sort_order = $15
-     WHERE id = $16;`,
+       price_en = $11, price_usd = $12, image = $13, visual_variant = $14,
+       published = $15, sort_order = $16
+     WHERE id = $17;`,
     [
       input.slug, input.category, input.subcategory, input.brand, input.gender,
       input.titleRu, input.titleEn,
       input.descriptionRu ?? null, input.descriptionEn ?? null,
-      input.priceRu, input.priceEn, input.image, input.visualVariant,
+      input.priceRu, input.priceEn, input.priceUsd,
+      input.image, input.visualVariant,
       input.published, input.sortOrder, id,
     ]
   );
@@ -309,6 +327,7 @@ export async function seedFromFile(): Promise<number> {
       titleEn: p.title.en,
       priceRu: p.priceLabel.ru,
       priceEn: p.priceLabel.en,
+      priceUsd: p.priceUsd,
       image: p.image,
       visualVariant: p.visualVariant,
       published: true,

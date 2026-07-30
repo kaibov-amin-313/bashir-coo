@@ -83,6 +83,11 @@
 }
 .material { color: var(--color-accent); text-transform: uppercase; }
 
+/* Price sits under the category label, in the primary text colour —
+   quiet, not shouted, and never in the accent (which is reserved for
+   category/eyebrow text). */
+.price { color: var(--color-text-primary); margin-top: 2px; }
+
 /* Touch-only request CTA below the label. Hidden by default (hover
    devices get the CTA inside the slide-up card); revealed only where
    there is no hover. */

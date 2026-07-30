@@ -199,6 +199,7 @@
 }
 .summaryLabel { text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; color: var(--color-text-muted); }
 .summaryValue { color: var(--color-text-primary); font-family: var(--font-heading); font-size: 1.125rem; }
+.summaryNote { color: var(--color-text-muted); text-align: right; margin-top: -6px; }
 
 .requestCta {
   display: inline-flex;

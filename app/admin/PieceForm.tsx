@@ -210,6 +210,29 @@ export function PieceForm({ piece, action, submitLabel }: Props) {
         </div>
       </div>
 
+      {/* Price — the numeric one first: it's the figure that actually
+          drives the cart total and, later, the payment step. The two
+          text fields below it are only the wording shown when this is
+          left empty. */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="priceUsd">Цена, $ (USD)</label>
+        <input
+          id="priceUsd"
+          name="priceUsd"
+          type="number"
+          min="0"
+          step="1"
+          inputMode="numeric"
+          defaultValue={piece?.priceUsd ?? ""}
+          className={styles.input}
+          placeholder="напр. 12500"
+        />
+        <span className={styles.hint}>
+          Только число, в долларах. Оставьте пустым — вещь будет
+          показываться как «Цена по запросу».
+        </span>
+      </div>
+
       {/* Prices */}
       <div className={styles.grid2}>
         <div className={styles.field}>
@@ -221,7 +244,7 @@ export function PieceForm({ piece, action, submitLabel }: Props) {
             className={styles.input}
           />
           <span className={styles.hint}>
-            Можно текстом: «Цена по запросу» или «12 500 000 ₸»
+            Показывается, только если поле «Цена, $» пустое
           </span>
         </div>
         <div className={styles.field}>

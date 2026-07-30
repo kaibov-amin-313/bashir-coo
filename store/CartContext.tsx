@@ -35,6 +35,8 @@ export interface CartLine {
   title: string;
   image: string;
   priceLabel: string;
+  /** Numeric price in USD; null means "quoted on request". */
+  priceUsd: number | null;
   category: string;
   /** Placeholder kind, so the cart thumbnail falls back gracefully. */
   visualVariant: string;

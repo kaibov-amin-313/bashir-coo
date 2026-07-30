@@ -26,7 +26,7 @@ import styles from "./SearchOverlay.module.css";
  */
 
 const CATEGORY_SEQUENCE: Category[] = [
-  "watches", "fashion", "footwear", "bags", "jewelry", "accessories",
+  "watches", "fashion", "footwear", "bags", "jewelry", "accessories", "perfume",
 ];
 
 const FEATURED_COUNT = 6;

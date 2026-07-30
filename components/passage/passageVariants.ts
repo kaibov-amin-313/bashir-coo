@@ -28,4 +28,5 @@ export const passageVariants: Record<Category, PassageCategoryVariant> = {
   bags: { macroKind: "macroMetal", objectKind: "objectSilhouette" },
   jewelry: { macroKind: "jewelryLight", objectKind: "objectSilhouette" },
   accessories: { macroKind: "macroTexture", objectKind: "objectSilhouette" },
+  perfume: { macroKind: "lightSurface", objectKind: "objectSilhouette" },
 };

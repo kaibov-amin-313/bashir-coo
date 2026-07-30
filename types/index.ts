@@ -19,7 +19,8 @@ export type Category =
   | "footwear"
   | "bags"
   | "jewelry"
-  | "accessories";
+  | "accessories"
+  | "perfume";
 
 export interface MediaAsset {
   id: string;

@@ -12,6 +12,7 @@ export const en: Dictionary = {
     bags: "Bags & Cases",
     jewelry: "Jewelry",
     accessories: "Accessories",
+    perfume: "Perfume",
   },
   meta: {
     siteTitle: "Bashir&Co — Private Sourcing of Rare Pieces",
@@ -75,7 +76,7 @@ export const en: Dictionary = {
     categories: {
       heading: "What We Source",
       intro:
-        "Six main areas. If what you need isn't on the list, ask anyway — we can probably help.",
+        "Seven main areas. If what you need isn't on the list, ask anyway — we can probably help.",
       items: [
         { name: "Watches", note: "Vintage references and archive examples" },
         { name: "Clothing", note: "Cashmere, rare cloths, archive collections" },
@@ -83,6 +84,7 @@ export const en: Dictionary = {
         { name: "Bags", note: "Classic models and commissioned examples" },
         { name: "Jewelry", note: "Stones with history, old cuts" },
         { name: "Accessories", note: "Small objects of precise work" },
+        { name: "Perfume", note: "Niche and discontinued fragrances" },
       ],
     },
     howItWorks: {

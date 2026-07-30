@@ -26,7 +26,7 @@ import styles from "./FilterPanel.module.css";
  */
 
 const CATEGORY_SEQUENCE: Category[] = [
-  "watches", "fashion", "footwear", "bags", "jewelry", "accessories",
+  "watches", "fashion", "footwear", "bags", "jewelry", "accessories", "perfume",
 ];
 
 export interface Filters {

@@ -35,6 +35,9 @@ const CATEGORIES: {
   { category: "bags", image: "/images/categories/bags.jpg", fallback: "bagLeather" },
   { category: "jewelry", image: "/images/categories/jewelry.jpg", fallback: "jewelryLight" },
   { category: "accessories", image: "/images/categories/accessories.jpg", fallback: "silk" },
+  // No real photo yet — MediaSlot falls back to this placeholder art
+  // gracefully until a real perfume photo is added at this path.
+  { category: "perfume", image: "/images/categories/perfume.jpg", fallback: "productStill" },
 ];
 
 interface CategoryMenuProps {

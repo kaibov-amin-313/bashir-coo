@@ -18,4 +18,5 @@ export const CATEGORIES: Category[] = [
   "bags",
   "jewelry",
   "accessories",
+  "perfume",
 ];

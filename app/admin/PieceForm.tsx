@@ -32,6 +32,7 @@ const CATEGORIES = [
   { value: "bags", label: "Сумки" },
   { value: "jewelry", label: "Украшения" },
   { value: "accessories", label: "Аксессуары" },
+  { value: "perfume", label: "Духи" },
 ];
 
 /** Fallback art shown when a photo is missing — matches the site's slots. */

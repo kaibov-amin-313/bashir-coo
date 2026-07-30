@@ -67,6 +67,13 @@ export const SUBCATEGORIES: Record<Category, Subcategory[]> = {
     { id: "small-leather", ru: "Малая кожгалантерея", en: "Small Leather Goods" },
     { id: "scarves", ru: "Шарфы и платки", en: "Scarves" },
   ],
+
+  perfume: [
+    { id: "eau-de-parfum", ru: "Eau de Parfum", en: "Eau de Parfum" },
+    { id: "extrait", ru: "Extrait de Parfum", en: "Extrait de Parfum" },
+    { id: "niche", ru: "Нишевая парфюмерия", en: "Niche Fragrances" },
+    { id: "discontinued", ru: "Снятые с производства", en: "Discontinued" },
+  ],
 };
 
 /** The subcategories belonging to one category. */

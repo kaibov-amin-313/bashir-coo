@@ -1,0 +1,6 @@
+<!-- Bashir&Co — favicon monogram. The "B" is lifted verbatim from
+     the wordmark (components/brand/Wordmark.tsx), not redrawn, so the
+     mark on a browser tab is the same letterform as the mark on the
+     site. Rosewood on ivory; the full wordmark is unreadable at 16px,
+     which is why this is a single letter. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><rect width="256" height="256" fill="#faf7f1"/><g transform="translate(20.368,-72.674) scale(2.19568) translate(0,206) scale(0.1,-0.1)"><path d="M498 1548 c7 -7 12 -24 12 -38 0 -28 -245 -645 -283 -713 -12 -22 -33 -45 -47 -53 -22 -13 -11 -14 115 -11 129 3 144 5 193 30 69 36 128 98 163 172 53 110 34 197 -49 232 l-34 14 59 29 c74 34 128 87 159 154 42 89 27 153 -42 182 -44 18 -264 20 -246 2z m205 -9 c44 -23 48 -59 17 -145 -45 -128 -122 -204 -208 -204 -23 0 -42 3 -41 8 0 4 31 79 67 167 52 123 73 162 92 172 31 16 45 16 73 2z m-140 -380 c38 -17 51 -50 43 -111 -8 -61 -61 -176 -105 -230 -55 -65 -168 -102 -190 -60 -7 13 9 63 63 197 40 99 75 188 79 198 8 20 71 24 110 6z" fill="#5e2c26"/></g></svg>

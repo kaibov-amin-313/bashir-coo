@@ -13,9 +13,9 @@
   visibility: hidden;
   transform: translateY(-8px);
   transition:
-    opacity var(--motion-standard) var(--ease-default),
-    transform var(--motion-standard) var(--ease-default),
-    visibility 0s linear var(--motion-standard, 380ms);
+    opacity var(--motion-surface) var(--ease-default),
+    transform var(--motion-surface) var(--ease-default),
+    visibility 0s linear var(--motion-surface);
   overflow-y: auto;
 }
 
@@ -150,7 +150,7 @@
   width: 100%;
   aspect-ratio: 1;
   background-color: var(--color-surface-secondary);
-  border-radius: 2px;
+  border-radius: var(--radius-minimal);
   overflow: hidden;
   margin-bottom: var(--space-2);
 }

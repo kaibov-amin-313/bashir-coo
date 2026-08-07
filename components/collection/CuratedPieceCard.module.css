@@ -8,7 +8,7 @@
   display: block;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: var(--radius-minimal);
   background-color: var(--color-surface-secondary);
 }
 .media > :global(.slot) { transition: transform 900ms var(--ease-default); }
@@ -28,7 +28,7 @@
   backdrop-filter: blur(4px);
   color: var(--color-text-primary);
   opacity: 1;
-  transition: opacity var(--motion-standard) var(--ease-default);
+  transition: opacity var(--motion-micro) var(--ease-default);
 }
 .card:hover .pill { opacity: 0; }
 
@@ -50,8 +50,8 @@
   transform: translateY(101%);
   opacity: 0;
   transition:
-    transform var(--motion-slow, 520ms) var(--ease-default),
-    opacity var(--motion-standard) var(--ease-default);
+    transform var(--motion-surface) var(--ease-default),
+    opacity var(--motion-micro) var(--ease-default);
 }
 .card:hover .hoverCard,
 .mediaLink:focus-visible .hoverCard {

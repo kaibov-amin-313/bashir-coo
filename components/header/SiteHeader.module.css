@@ -11,7 +11,7 @@
   /* The light/dark switch is animated, not instantaneous: hovering the
      menu shouldn't make the header flash. */
   transition:
-    transform var(--motion-standard, 380ms) var(--ease-default),
+    transform var(--motion-response) var(--ease-default),
     background-color 320ms var(--ease-default);
   will-change: transform;
 }
@@ -83,7 +83,7 @@
   width: auto;
   display: block;
 }
-.wordmark { transition: color var(--motion-standard) var(--ease-default); }
+.wordmark { transition: color var(--motion-micro) var(--ease-default); }
 
 /* ---- Tier 2: nav row ---- */
 .navRow {

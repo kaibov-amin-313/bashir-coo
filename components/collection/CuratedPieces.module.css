@@ -103,8 +103,8 @@
   padding: var(--space-2) var(--space-5);
   background-color: var(--color-surface-contrast);
   text-decoration: none;
-  border-radius: 1px;
-  transition: background-color var(--motion-standard) var(--ease-default);
+  border-radius: var(--radius-minimal);
+  transition: background-color var(--motion-micro) var(--ease-default);
 }
 .closingCta :global(span) { color: var(--color-text-on-contrast); }
 .closingCta:hover, .closingCta:focus-visible { background-color: var(--color-accent-strong); }
@@ -238,7 +238,7 @@
   min-height: 48px;
   background: none;
   border: 1px solid var(--color-text-primary);
-  border-radius: 1px;
+  border-radius: var(--radius-minimal);
   cursor: pointer;
   color: var(--color-text-primary);
   transition:

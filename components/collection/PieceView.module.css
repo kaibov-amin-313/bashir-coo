@@ -86,7 +86,7 @@
   background-color: var(--color-surface-contrast);
   text-decoration: none;
   border-radius: var(--radius-minimal);
-  transition: background-color var(--motion-standard) var(--ease-default);
+  transition: background-color var(--motion-micro) var(--ease-default);
 }
 .inquire :global(span) { color: var(--color-text-on-contrast); }
 .inquire:hover, .inquire:focus-visible { background-color: var(--color-accent-strong); }

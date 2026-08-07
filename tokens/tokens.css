@@ -158,6 +158,13 @@
   --border-focus: 3px;
   --radius-minimal: 2px;
   --shadow-media-edge: inset 0 0 28px rgba(56, 48, 38, 0.12);
+  /* Elevation. Two levels, because the interface only has two: a surface
+     lying on the page (the toast) and a surface covering it (drawers, the
+     mega-menu). Previously each of those hand-rolled its own rgba, so
+     nothing declared which sat above which. Warm-black to match the
+     palette — a neutral grey shadow reads cold against the ivory. */
+  --shadow-raised: 0 12px 32px -16px rgba(38, 34, 32, 0.45);
+  --shadow-overlay: 0 30px 60px -40px rgba(38, 34, 32, 0.35);
 
   /* ---------------------------------------------------------------- */
   /* Z-index — five layers, ordered                                    */
@@ -191,6 +198,18 @@
   /* ---------------------------------------------------------------- */
   --motion-micro: 0.14s;
   --motion-standard: 1s;
+  /* Sliding surfaces — drawers, overlays, the mega-menu. The standard
+     band is documented as 0.7–1.3s (tokens/motion.ts), and `default` is
+     explicitly "a starting point, not a mandate"; a drawer opening reads
+     as sluggish at the top of that range, so surfaces take the bottom of
+     it. Still the standard band, just its faster end. */
+  --motion-surface: 0.7s;
+  /* Motion that answers continuous input — the header responding to
+     scroll. Neither a reveal nor a hover: it has to keep up with the
+     finger, so it takes the top of the micro band rather than the
+     standard one it was using, where a full second left it still
+     travelling long after the scroll had stopped. */
+  --motion-response: 0.18s;
   --ease-default: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* power2.out approximation for plain CSS */
 }
 

@@ -179,7 +179,7 @@
   text-decoration: none;
   border-radius: var(--radius-minimal);
   align-self: flex-start;
-  transition: background-color var(--motion-standard) var(--ease-default);
+  transition: background-color var(--motion-micro) var(--ease-default);
 }
 
 .ctaButton :global(span) {

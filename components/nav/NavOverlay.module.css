@@ -9,7 +9,7 @@
   align-items: flex-start;
   padding: var(--space-6) var(--space-4);
   opacity: 0;
-  transition: opacity var(--motion-standard) var(--ease-default);
+  transition: opacity var(--motion-surface) var(--ease-default);
 }
 
 .overlay.visible {

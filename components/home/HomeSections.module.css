@@ -198,7 +198,7 @@
   margin-top: var(--space-2);
   padding: var(--space-2) var(--space-5);
   background-color: var(--color-surface-primary);
-  border-radius: 1px;
+  border-radius: var(--radius-minimal);
   text-decoration: none;
 }
 .bannerCta :global(span) { color: #2d2924; }

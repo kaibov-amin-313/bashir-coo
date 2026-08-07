@@ -9,7 +9,7 @@
   background-color: var(--color-accent);
   color: var(--color-text-on-contrast);
   margin: var(--space-7) var(--space-7) 0;
-  border-radius: 2px;
+  border-radius: var(--radius-minimal);
 }
 .panelInner {
   display: grid;

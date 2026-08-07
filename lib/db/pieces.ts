@@ -50,6 +50,14 @@ export interface PieceRecord {
   priceEn: string;
   /** Numeric price in USD; null means "quoted on request". */
   priceUsd: number | null;
+  /** Maker's own designation, language-neutral (e.g. "RM 030"). */
+  reference: string | null;
+  sizeRu: string | null;
+  sizeEn: string | null;
+  conditionRu: string | null;
+  conditionEn: string | null;
+  completenessRu: string | null;
+  completenessEn: string | null;
   image: string;
   visualVariant: PlaceholderKind;
   published: boolean;
@@ -117,6 +125,18 @@ export async function ensureSchema(): Promise<void> {
       -- commissions — and is deliberately not 0. price_ru/price_en stay
       -- as the display wording used when this is NULL.
       price_usd NUMERIC(12,2),
+      -- Specifications shown on the piece page. All nullable: a piece can
+      -- be listed before its details are confirmed, and an empty field
+      -- renders as absent rather than as an empty row. The reference is
+      -- language-neutral (a maker's own designation, e.g. RM 030); the
+      -- rest are prose and so bilingual.
+      reference TEXT,
+      size_ru TEXT,
+      size_en TEXT,
+      condition_ru TEXT,
+      condition_en TEXT,
+      completeness_ru TEXT,
+      completeness_en TEXT,
       image TEXT NOT NULL DEFAULT '',
       visual_variant TEXT NOT NULL DEFAULT 'productStill',
       published BOOLEAN NOT NULL DEFAULT TRUE,
@@ -130,6 +150,17 @@ export async function ensureSchema(): Promise<void> {
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS brand TEXT NOT NULL DEFAULT '';`);
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS gender TEXT NOT NULL DEFAULT 'unisex';`);
   await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS price_usd NUMERIC(12,2);`);
+  for (const col of [
+    "reference TEXT",
+    "size_ru TEXT",
+    "size_en TEXT",
+    "condition_ru TEXT",
+    "condition_en TEXT",
+    "completeness_ru TEXT",
+    "completeness_en TEXT",
+  ]) {
+    await query(`ALTER TABLE pieces ADD COLUMN IF NOT EXISTS ${col};`);
+  }
 
   await query(`
     CREATE TABLE IF NOT EXISTS admin_users (
@@ -164,6 +195,13 @@ function rowToRecord(r: PieceRow): PieceRecord {
     priceUsd: r.price_usd === null || r.price_usd === undefined
       ? null
       : Number(r.price_usd),
+    reference: (r.reference as string) ?? null,
+    sizeRu: (r.size_ru as string) ?? null,
+    sizeEn: (r.size_en as string) ?? null,
+    conditionRu: (r.condition_ru as string) ?? null,
+    conditionEn: (r.condition_en as string) ?? null,
+    completenessRu: (r.completeness_ru as string) ?? null,
+    completenessEn: (r.completeness_en as string) ?? null,
     image: String(r.image ?? ""),
     visualVariant: r.visual_variant as PlaceholderKind,
     published: Boolean(r.published),
@@ -187,6 +225,13 @@ function fallbackRecords(): PieceRecord[] {
     priceRu: p.priceLabel.ru,
     priceEn: p.priceLabel.en,
     priceUsd: p.priceUsd,
+    reference: null,
+    sizeRu: null,
+    sizeEn: null,
+    conditionRu: null,
+    conditionEn: null,
+    completenessRu: null,
+    completenessEn: null,
     image: p.image,
     visualVariant: p.visualVariant,
     published: true,
@@ -253,6 +298,14 @@ export interface PieceInput {
   priceRu: string;
   priceEn: string;
   priceUsd: number | null;
+  /** Maker's own designation, language-neutral (e.g. "RM 030"). */
+  reference: string | null;
+  sizeRu: string | null;
+  sizeEn: string | null;
+  conditionRu: string | null;
+  conditionEn: string | null;
+  completenessRu: string | null;
+  completenessEn: string | null;
   image: string;
   visualVariant: PlaceholderKind;
   published: boolean;
@@ -265,13 +318,18 @@ export async function createPiece(input: PieceInput): Promise<void> {
     `INSERT INTO pieces (
        slug, category, subcategory, brand, gender, title_ru, title_en,
        description_ru, description_en, price_ru, price_en, price_usd,
+       reference, size_ru, size_en, condition_ru, condition_en,
+       completeness_ru, completeness_en,
        image, visual_variant, published, sort_order
-     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16);`,
+     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23);`,
     [
       input.slug, input.category, input.subcategory, input.brand, input.gender,
       input.titleRu, input.titleEn,
       input.descriptionRu ?? null, input.descriptionEn ?? null,
       input.priceRu, input.priceEn, input.priceUsd,
+      input.reference, input.sizeRu, input.sizeEn,
+      input.conditionRu, input.conditionEn,
+      input.completenessRu, input.completenessEn,
       input.image, input.visualVariant,
       input.published, input.sortOrder,
     ]
@@ -285,14 +343,21 @@ export async function updatePiece(id: number, input: PieceInput): Promise<void> 
        slug = $1, category = $2, subcategory = $3, brand = $4, gender = $5,
        title_ru = $6, title_en = $7,
        description_ru = $8, description_en = $9, price_ru = $10,
-       price_en = $11, price_usd = $12, image = $13, visual_variant = $14,
-       published = $15, sort_order = $16
-     WHERE id = $17;`,
+       price_en = $11, price_usd = $12,
+       reference = $13, size_ru = $14, size_en = $15,
+       condition_ru = $16, condition_en = $17,
+       completeness_ru = $18, completeness_en = $19,
+       image = $20, visual_variant = $21,
+       published = $22, sort_order = $23
+     WHERE id = $24;`,
     [
       input.slug, input.category, input.subcategory, input.brand, input.gender,
       input.titleRu, input.titleEn,
       input.descriptionRu ?? null, input.descriptionEn ?? null,
       input.priceRu, input.priceEn, input.priceUsd,
+      input.reference, input.sizeRu, input.sizeEn,
+      input.conditionRu, input.conditionEn,
+      input.completenessRu, input.completenessEn,
       input.image, input.visualVariant,
       input.published, input.sortOrder, id,
     ]
@@ -328,6 +393,13 @@ export async function seedFromFile(): Promise<number> {
       priceRu: p.priceLabel.ru,
       priceEn: p.priceLabel.en,
       priceUsd: p.priceUsd,
+      reference: null,
+      sizeRu: null,
+      sizeEn: null,
+      conditionRu: null,
+      conditionEn: null,
+      completenessRu: null,
+      completenessEn: null,
       image: p.image,
       visualVariant: p.visualVariant,
       published: true,

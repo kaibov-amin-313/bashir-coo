@@ -225,6 +225,17 @@ export interface LocalizedCuratedPiece {
   status: string;
   priceLabel: string;
   priceUsd: number | null;
+  /**
+   * Long-form copy and specifications, shown on the piece's own page.
+   * Every one is nullable: the twelve pieces shipped in this file carry
+   * none, and a piece can be listed before its details are confirmed.
+   * The page omits whatever is absent rather than printing empty rows.
+   */
+  description: string | null;
+  reference: string | null;
+  size: string | null;
+  condition: string | null;
+  completeness: string | null;
   visualVariant: PlaceholderKind;
   image: string;
   inquirySubject: string;
@@ -241,6 +252,11 @@ export function getCuratedPieces(locale: Locale): LocalizedCuratedPiece[] {
     status: p.status[locale],
     priceLabel: p.priceLabel[locale],
     priceUsd: p.priceUsd,
+    description: null,
+    reference: null,
+    size: null,
+    condition: null,
+    completeness: null,
     visualVariant: p.visualVariant,
     image: p.image,
     inquirySubject: p.inquirySubject[locale],

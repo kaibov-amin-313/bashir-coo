@@ -13,6 +13,13 @@ export const routes = {
   home: "/",
   collection: "/collection",
   collectionDetail: (collectionSlug: string) => `/collection/${collectionSlug}`,
+  /**
+   * A single piece's own page. Kept off /collection/… deliberately: that
+   * segment already resolves curated collection slugs, and one dynamic
+   * segment serving two kinds of thing would make every lookup guess
+   * which it was holding.
+   */
+  piece: (slug: string) => `/piece/${slug}`,
   privateSourcing: "/private-sourcing",
   specialPiecesByRequest: "/special-pieces-by-request",
   about: "/about",

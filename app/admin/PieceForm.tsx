@@ -285,6 +285,64 @@ export function PieceForm({ piece, action, submitLabel }: Props) {
         </div>
       </div>
 
+
+      {/* Specifications — shown on the piece's own page. The house's
+          promise is "проверяем подлинность, состояние, комплект и
+          историю", so these four are that promise made visible. Any
+          field left blank is simply omitted from the page. */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="reference">Референс</label>
+        <input
+          id="reference"
+          name="reference"
+          defaultValue={piece?.reference ?? ""}
+          className={styles.input}
+          placeholder="напр. RM 030 — необязательно"
+        />
+        <span className={styles.hint}>
+          Обозначение производителя. Одно для обоих языков.
+        </span>
+      </div>
+
+      <div className={styles.grid2}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="sizeRu">Размер (RU)</label>
+          <input id="sizeRu" name="sizeRu" defaultValue={piece?.sizeRu ?? ""}
+            className={styles.input} placeholder="напр. 43 мм" />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="sizeEn">Размер (EN)</label>
+          <input id="sizeEn" name="sizeEn" defaultValue={piece?.sizeEn ?? ""}
+            className={styles.input} placeholder="e.g. 43 mm" />
+        </div>
+      </div>
+
+      <div className={styles.grid2}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="conditionRu">Состояние (RU)</label>
+          <input id="conditionRu" name="conditionRu" defaultValue={piece?.conditionRu ?? ""}
+            className={styles.input} placeholder="напр. Отличное, без следов носки" />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="conditionEn">Состояние (EN)</label>
+          <input id="conditionEn" name="conditionEn" defaultValue={piece?.conditionEn ?? ""}
+            className={styles.input} placeholder="e.g. Excellent, unworn" />
+        </div>
+      </div>
+
+      <div className={styles.grid2}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="completenessRu">Комплект (RU)</label>
+          <input id="completenessRu" name="completenessRu" defaultValue={piece?.completenessRu ?? ""}
+            className={styles.input} placeholder="напр. Коробка, документы, гарантия" />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="completenessEn">Комплект (EN)</label>
+          <input id="completenessEn" name="completenessEn" defaultValue={piece?.completenessEn ?? ""}
+            className={styles.input} placeholder="e.g. Box, papers, warranty" />
+        </div>
+      </div>
+
       {/* Slug + order + published */}
       <div className={styles.grid2}>
         <div className={styles.field}>

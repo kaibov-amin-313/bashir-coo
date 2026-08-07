@@ -3,7 +3,7 @@ import { TypeBase } from "@/components/type";
 import { MediaSlot } from "@/components/media";
 import { AddToCartButton } from "@/components/cart";
 import { formatUsd } from "@/lib/price";
-import { routes, PIECE_QUERY_PARAM } from "@/config/routes";
+import { routes } from "@/config/routes";
 import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
 import styles from "./CuratedPieceCard.module.css";
@@ -26,12 +26,16 @@ interface CuratedPieceCardProps {
 }
 
 export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCardProps) {
-  const inquiryHref = `${localePath(locale, routes.contact)}?${PIECE_QUERY_PARAM}=${piece.slug}`;
+  // The card now opens the piece's own page instead of jumping straight
+  // to the enquiry form. The old destination skipped the step where
+  // interest becomes intent: there was no way to see the photograph
+  // larger, read the description, or link to the piece at all.
+  const pieceHref = localePath(locale, routes.piece(piece.slug));
   const categoryLabel = categoryLabelOf(dictionary, piece.category);
 
   return (
     <article className={styles.card} aria-label={piece.title}>
-      <Link href={inquiryHref} className={styles.mediaLink}>
+      <Link href={pieceHref} className={styles.mediaLink}>
         <span className={styles.media}>
           <MediaSlot
             src={piece.image}
@@ -53,7 +57,7 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
               <TypeBase variant="metadata" as="span">{categoryLabel}</TypeBase>
             </span>
             <span className={styles.hoverCta}>
-              <TypeBase variant="ctaText" as="span">{dictionary.collectionPage.inquire}</TypeBase>
+              <TypeBase variant="ctaText" as="span">{dictionary.collectionPage.viewPiece}</TypeBase>
             </span>
           </span>
         </span>
@@ -93,11 +97,12 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
               : piece.priceLabel}
           </TypeBase>
         </span>
-        {/* Touch-only CTA: on hover devices the request link lives inside the
-            slide-up hover card; on touch there is no hover, so it surfaces
-            here instead. Hidden on hover-capable devices via CSS. */}
+        {/* Touch-only label: on hover devices this sits inside the slide-up
+            card; on touch there is no hover, so it surfaces here. It reads
+            "смотреть", not "оставить запрос" — the card opens the piece's
+            page now, and the enquiry lives one step further on. */}
         <span className={styles.bodyCta}>
-          <TypeBase variant="ctaText" as="span">{dictionary.collectionPage.inquire}</TypeBase>
+          <TypeBase variant="ctaText" as="span">{dictionary.collectionPage.viewPiece}</TypeBase>
         </span>
       </div>
     </article>

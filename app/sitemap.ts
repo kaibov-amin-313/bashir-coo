@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { collectionRecords } from "@/data/collections";
 import { routes } from "@/config/routes";
+import { getPublicPieces } from "@/lib/db/publicPieces";
 import { absoluteUrl } from "@/lib/site";
 
 /**
@@ -33,10 +34,15 @@ function enPath(ruPath: string): string {
   return ruPath === "/" ? "/en" : `/en${ruPath}`;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
-  return PUBLIC_PATHS.flatMap((path) => {
+  // Each piece now has its own page, and those are the pages worth
+  // indexing: they carry the brand and model a search actually uses.
+  const pieces = await getPublicPieces("ru");
+  const paths = [...PUBLIC_PATHS, ...pieces.map((p) => routes.piece(p.slug))];
+
+  return paths.flatMap((path) => {
     const languages = {
       ru: absoluteUrl(path),
       en: absoluteUrl(enPath(path)),
@@ -44,7 +50,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // The homepage is the entry point; collection detail pages sit
     // deepest. Priorities reflect that rather than being uniform.
-    const priority = path === routes.home ? 1 : path.startsWith("/collection/") ? 0.6 : 0.8;
+    const priority =
+      path === routes.home ? 1 : path.startsWith("/piece/") ? 0.7 : path.startsWith("/collection/") ? 0.6 : 0.8;
 
     return [
       {

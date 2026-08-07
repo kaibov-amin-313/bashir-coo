@@ -77,6 +77,11 @@ function slugify(input: string): string {
     .slice(0, 60);
 }
 
+/** A trimmed form field, or null when it's blank. */
+function text(form: FormData, key: string): string | null {
+  return String(form.get(key) ?? "").trim() || null;
+}
+
 function readForm(form: FormData): PieceInput {
   const titleRu = String(form.get("titleRu") ?? "").trim();
   const titleEn = String(form.get("titleEn") ?? "").trim();
@@ -117,6 +122,15 @@ function readForm(form: FormData): PieceInput {
     priceEn: String(form.get("priceEn") ?? "").trim() || "Price on request",
     // Empty field → null ("quoted on request"), never 0.
     priceUsd: parseUsdInput(String(form.get("priceUsd") ?? "")),
+    // Specs. Empty stays null rather than "", so the piece page can tell
+    // "not filled in" from "deliberately blank" and omit the row entirely.
+    reference: text(form, "reference"),
+    sizeRu: text(form, "sizeRu"),
+    sizeEn: text(form, "sizeEn"),
+    conditionRu: text(form, "conditionRu"),
+    conditionEn: text(form, "conditionEn"),
+    completenessRu: text(form, "completenessRu"),
+    completenessEn: text(form, "completenessEn"),
     image: String(form.get("image") ?? "").trim(),
     visualVariant: (String(
       form.get("visualVariant") ?? "productStill"

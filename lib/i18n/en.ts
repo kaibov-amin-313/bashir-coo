@@ -135,6 +135,7 @@ export const en: Dictionary = {
     intro: "Pieces available now. Price and details on request via WhatsApp.",
     categoriesLine:
       "Watches · Clothing · Footwear · Bags · Jewelry · Accessories",
+    viewPiece: "View piece",
     inquire: "Inquire",
     closing:
       "Didn't find what you need? Message us — we'll source it.",

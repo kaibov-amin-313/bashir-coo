@@ -99,6 +99,7 @@ export interface Dictionary {
     title: string;
     intro: string;
     categoriesLine: string;
+    viewPiece: string;
     inquire: string;
     closing: string;
     closingCta: string;

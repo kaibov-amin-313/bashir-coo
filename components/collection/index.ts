@@ -14,3 +14,4 @@ export {
 export { PieceScrollHandler } from "./PieceScrollHandler";
 export { CuratedPiecesView } from "./CuratedPiecesView";
 export { CuratedPieceCard } from "./CuratedPieceCard";
+export { PieceView } from "./PieceView";

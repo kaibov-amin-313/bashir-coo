@@ -1,14 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TypeBase } from "@/components/type";
 import { MediaSlot } from "@/components/media";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useDialogFocus } from "@/hooks/useDialogFocus";
-import { useCart } from "@/store/CartContext";
+import { useCart, MAX_QTY } from "@/store/CartContext";
 import { whatsappLink } from "@/lib/contacts";
 import { formatUsd, sumUsd, priceOnRequestLabel } from "@/lib/price";
-import type { Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, type Dictionary, type Locale } from "@/lib/i18n";
 import styles from "./CartPanel.module.css";
 
 /**
@@ -31,15 +31,51 @@ interface CartPanelProps {
   isOpen: boolean;
   onClose: () => void;
   locale: Locale;
+  dictionary: Dictionary;
 }
 
-export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
+export function CartPanel({ isOpen, onClose, locale, dictionary }: CartPanelProps) {
   const { lines, count, remove, setQty, clear } = useCart();
   const panelRef = useRef<HTMLElement>(null);
   useScrollLock(isOpen);
   useDialogFocus(isOpen, panelRef, onClose);
 
   const t = (ru: string, en: string) => (locale === "ru" ? ru : en);
+
+  /**
+   * Fresh titles in the current language, keyed by slug.
+   *
+   * A line stores the title as it read when the piece was added, so a
+   * cart filled on the Russian site showed Russian names after switching
+   * to English. The catalogue endpoint the search overlay already uses
+   * returns titles in the requested locale; matching by slug lets the
+   * panel show the right language while the stored snapshot stays as the
+   * fallback for anything since removed from the catalogue.
+   */
+  const [titles, setTitles] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (!isOpen || lines.length === 0) return;
+    let cancelled = false;
+    fetch(`/api/pieces?locale=${locale}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((pieces: { slug: string; title: string }[] | null) => {
+        if (cancelled || !Array.isArray(pieces)) return;
+        setTitles(
+          Object.fromEntries(pieces.map((p) => [p.slug, p.title]))
+        );
+      })
+      .catch(() => {
+        // Offline or the endpoint is down — the stored titles still
+        // render, just in whichever language they were added.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, locale, lines.length]);
+
+  const titleOf = (line: { slug: string; title: string }) =>
+    titles[line.slug] ?? line.title;
 
   // Sum of the priced lines. `null` when nothing in the cart carries a
   // price, so an all-on-request cart shows the wording, not "$0".
@@ -59,10 +95,24 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
         const qty = l.qty > 1 ? ` ×${l.qty}` : "";
         const price =
           l.priceUsd !== null ? ` — ${formatUsd(l.priceUsd, locale)}` : "";
-        return `• ${l.title}${qty}${price}`;
+        return `• ${titleOf(l)}${qty}${price}`;
       })
       .join("\n");
-    return `${intro}\n${items}`;
+    const full = `${intro}\n${items}`;
+
+    // wa.me carries the message in the URL, and Cyrillic percent-encodes
+    // to six characters per letter — a ten-line cart already crosses
+    // 2,000 characters, past which some clients silently truncate. A
+    // request that arrives cut in half is worse than a short one that
+    // asks to continue in chat, so long carts send a summary instead.
+    const URL_SAFE_CHARS = 1200;
+    if (encodeURIComponent(full).length <= URL_SAFE_CHARS) return full;
+
+    const count = lines.reduce((n, l) => n + l.qty, 0);
+    return t(
+      `Здравствуйте! Меня интересуют ${count} позиций из подборки — пришлю список следующим сообщением.`,
+      `Hello! I'm interested in ${count} pieces from my selection — I'll send the list in my next message.`
+    );
   })();
 
   return (
@@ -133,29 +183,31 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
                     src={line.image}
                     fallbackKind={line.visualVariant as never}
                     sizes="76px"
-                    alt={line.title}
-                    label={line.category.toUpperCase()}
+                    alt={titleOf(line)}
+                    label={categoryLabelOf(dictionary, line.category).toUpperCase()}
                   />
                 </span>
 
                 <div className={styles.lineInfo}>
                   <span className={styles.lineTop}>
-                    <span className={styles.lineCategory}>{line.category}</span>
+                    <span className={styles.lineCategory}>
+                      {categoryLabelOf(dictionary, line.category)}
+                    </span>
                     <button
                       type="button"
                       className={styles.remove}
                       onClick={() => remove(line.slug)}
-                      aria-label={`${t("Убрать", "Remove")}: ${line.title}`}
+                      aria-label={`${t("Убрать", "Remove")}: ${titleOf(line)}`}
                     >
                       ✕
                     </button>
                   </span>
-                  <TypeBase variant="objectTitle" as="h3">{line.title}</TypeBase>
+                  <TypeBase variant="objectTitle" as="h3">{titleOf(line)}</TypeBase>
                   <span className={styles.linePrice}>
                     <TypeBase variant="caption" as="span">
                       {line.priceUsd !== null
                         ? formatUsd(line.priceUsd, locale)
-                        : line.priceLabel}
+                        : priceOnRequestLabel(locale)}
                     </TypeBase>
                   </span>
 
@@ -177,6 +229,7 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
                       className={styles.qtyBtn}
                       onClick={() => setQty(line.slug, line.qty + 1)}
                       aria-label={t("Добавить", "Increase")}
+                      disabled={line.qty >= MAX_QTY}
                     >
                       +
                     </button>

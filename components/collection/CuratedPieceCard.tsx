@@ -69,9 +69,10 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
           slug: piece.slug,
           title: piece.title,
           image: piece.image,
-          priceLabel: piece.priceLabel,
           priceUsd: piece.priceUsd,
-          category: categoryLabel,
+          // The key, not the label — the panel translates it, so a cart
+          // filled in Russian reads correctly in English.
+          category: piece.category,
           visualVariant: piece.visualVariant,
         }}
       />

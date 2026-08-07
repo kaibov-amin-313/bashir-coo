@@ -192,7 +192,7 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
               </svg>
             </a>
 
-            <CartButton locale={locale} />
+            <CartButton locale={locale} dictionary={dictionary} />
           </span>
 
           <span className={styles.locales}>

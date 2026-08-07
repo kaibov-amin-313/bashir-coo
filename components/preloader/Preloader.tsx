@@ -25,11 +25,44 @@ import styles from "./Preloader.module.css";
 const MIN_MS = 1600; // let the draw actually finish, not flash
 const MAX_MS = 3500; // never hold the page hostage to a slow asset
 
+/**
+ * Shown once per browsing session, not once per page view.
+ *
+ * The draw held the homepage for MIN_MS before content on every single
+ * visit — including a return to `/` from the catalogue, which remounts
+ * this component and replayed the whole thing. A ritual repeated on
+ * demand stops being a ritual and becomes a toll. sessionStorage keeps
+ * it as an entrance: the first arrival gets the full draw, the rest of
+ * the session goes straight in, and a genuinely new visit gets it again.
+ */
+const SESSION_KEY = "bashirco_preloader_shown";
+
 export function Preloader() {
-  const [hidden, setHidden] = useState(false);
-  const [removed, setRemoved] = useState(false);
+  // Assume "already seen" until the effect proves otherwise: rendering
+  // the overlay and then hiding it a tick later would flash it on every
+  // navigation, which is worse than not showing it at all.
+  const [hidden, setHidden] = useState(true);
+  const [removed, setRemoved] = useState(true);
 
   useEffect(() => {
+    let seen = false;
+    try {
+      seen = window.sessionStorage.getItem(SESSION_KEY) === "1";
+    } catch {
+      // Private mode can throw on storage access — fall back to showing
+      // the draw, which is the original behaviour.
+    }
+    if (seen) return;
+
+    try {
+      window.sessionStorage.setItem(SESSION_KEY, "1");
+    } catch {
+      /* not fatal */
+    }
+
+    setHidden(false);
+    setRemoved(false);
+
     const start = Date.now();
     let done = false;
 

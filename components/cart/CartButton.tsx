@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCart } from "@/store/CartContext";
 import { CartPanel } from "./CartPanel";
-import type { Locale } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import styles from "./CartButton.module.css";
 
 /**
@@ -25,9 +25,10 @@ import styles from "./CartButton.module.css";
 
 interface CartButtonProps {
   locale: Locale;
+  dictionary: Dictionary;
 }
 
-export function CartButton({ locale }: CartButtonProps) {
+export function CartButton({ locale, dictionary }: CartButtonProps) {
   const { count, isOpen, open, close } = useCart();
   const [mounted, setMounted] = useState(false);
   const label = locale === "ru" ? "Корзина" : "Cart";
@@ -70,7 +71,7 @@ export function CartButton({ locale }: CartButtonProps) {
 
       {mounted
         ? createPortal(
-            <CartPanel isOpen={isOpen} onClose={close} locale={locale} />,
+            <CartPanel isOpen={isOpen} onClose={close} locale={locale} dictionary={dictionary} />,
             document.body
           )
         : null}

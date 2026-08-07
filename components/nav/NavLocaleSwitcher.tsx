@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./NavLocaleSwitcher.module.css";
 import { TypeBase } from "@/components/type";
 import type { Dictionary, Locale } from "@/lib/i18n";
@@ -23,8 +23,12 @@ export function NavLocaleSwitcher({
   dictionary,
 }: NavLocaleSwitcherProps) {
   const pathname = usePathname() ?? "/";
+  // The query string carries the catalogue's active category, so dropping
+  // it meant switching language silently cleared the visitor's filter and
+  // dumped them back into the full catalogue.
+  const searchParams = useSearchParams();
 
-  const target =
+  const basePath =
     locale === "ru"
       ? pathname === "/"
         ? "/en"
@@ -32,6 +36,9 @@ export function NavLocaleSwitcher({
       : pathname === "/en"
         ? "/"
         : pathname.replace(/^\/en/, "") || "/";
+
+  const query = searchParams?.toString() ?? "";
+  const target = query ? `${basePath}?${query}` : basePath;
 
   return (
     <Link

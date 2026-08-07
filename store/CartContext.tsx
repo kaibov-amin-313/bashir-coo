@@ -32,15 +32,46 @@ import {
 
 export interface CartLine {
   slug: string;
+  /**
+   * The title as it read when the piece was added — a snapshot, used as
+   * the fallback. The panel prefers a fresh title in the current language
+   * when it can fetch one, because a cart filled on the Russian site and
+   * opened on the English one would otherwise show Russian names under an
+   * English heading (and send them to the concierge that way).
+   */
   title: string;
   image: string;
-  priceLabel: string;
   /** Numeric price in USD; null means "quoted on request". */
   priceUsd: number | null;
+  /**
+   * The category KEY (e.g. "bags"), not its label. Storing the label
+   * froze the language at add-time; the key is translated at render.
+   */
   category: string;
   /** Placeholder kind, so the cart thumbnail falls back gracefully. */
   visualVariant: string;
   qty: number;
+}
+
+/**
+ * Carts saved by earlier builds stored a localized `category` label and a
+ * `priceLabel` string. Those keys are harmless if left, but a stored line
+ * missing `category` entirely would render blank, so normalise on read.
+ */
+function migrateLine(raw: unknown): CartLine | null {
+  if (typeof raw !== "object" || raw === null) return null;
+  const l = raw as Record<string, unknown>;
+  if (typeof l.slug !== "string" || typeof l.title !== "string") return null;
+  return {
+    slug: l.slug,
+    title: l.title,
+    image: typeof l.image === "string" ? l.image : "",
+    priceUsd: typeof l.priceUsd === "number" ? l.priceUsd : null,
+    category: typeof l.category === "string" ? l.category : "",
+    visualVariant:
+      typeof l.visualVariant === "string" ? l.visualVariant : "productStill",
+    qty: typeof l.qty === "number" && l.qty > 0 ? Math.floor(l.qty) : 1,
+  };
 }
 
 type CartState = { lines: CartLine[] };
@@ -54,6 +85,9 @@ type CartAction =
 
 const STORAGE_KEY = "bashirco_cart";
 
+/** Upper bound per line. Sourcing is one-off; this is a misclick guard. */
+export const MAX_QTY = 10;
+
 function reducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "hydrate":
@@ -65,7 +99,9 @@ function reducer(state: CartState, action: CartAction): CartState {
         // Already in the cart — bump its quantity rather than duplicating.
         return {
           lines: state.lines.map((l) =>
-            l.slug === action.line.slug ? { ...l, qty: l.qty + 1 } : l
+            l.slug === action.line.slug
+              ? { ...l, qty: Math.min(MAX_QTY, l.qty + 1) }
+              : l
           ),
         };
       }
@@ -76,7 +112,15 @@ function reducer(state: CartState, action: CartAction): CartState {
       return { lines: state.lines.filter((l) => l.slug !== action.slug) };
 
     case "setQty": {
-      const qty = Math.max(1, Math.floor(action.qty) || 1);
+      // Clamped at both ends. The floor was already guarded; the ceiling
+      // wasn't, so the control could be clicked up to any number. These
+      // are single sourced pieces — a request for "Birkin ×47" is a
+      // misclick, not an order, and MAX_QTY keeps it from reaching the
+      // concierge as one.
+      const qty = Math.min(
+        MAX_QTY,
+        Math.max(1, Math.floor(action.qty) || 1)
+      );
       return {
         lines: state.lines.map((l) =>
           l.slug === action.slug ? { ...l, qty } : l
@@ -120,8 +164,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
-      const parsed = JSON.parse(raw) as CartLine[];
-      if (Array.isArray(parsed)) dispatch({ type: "hydrate", lines: parsed });
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const lines = parsed
+          .map(migrateLine)
+          .filter((l): l is CartLine => l !== null);
+        dispatch({ type: "hydrate", lines });
+      }
     } catch {
       // Corrupt or unreadable storage — start from an empty cart.
     }

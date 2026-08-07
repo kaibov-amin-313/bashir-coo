@@ -42,6 +42,7 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname() ?? "/";
@@ -102,9 +103,40 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
   const enTarget =
     locale === "en" ? pathname : pathname === "/" ? "/en" : `/en${pathname}`;
 
+  /**
+   * Publish the header's height as --header-offset so sticky elements
+   * below it can clear it.
+   *
+   * The catalogue's filter bar sticks to `top: 0` and sat *under* this
+   * header (z-index 5 against 10), so scrolling back up buried the
+   * Filters control. The height can't be hard-coded: three tiers of
+   * padding differ between breakpoints. Measured instead, and set to 0
+   * while the header is slid out of view, so the bar rises to the top
+   * edge rather than leaving a gap where the header used to be.
+   */
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const publish = () => {
+      const h = hidden ? 0 : el.getBoundingClientRect().height;
+      document.documentElement.style.setProperty("--header-offset", `${h}px`);
+    };
+
+    publish();
+    const ro = new ResizeObserver(publish);
+    ro.observe(el);
+    window.addEventListener("resize", publish);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", publish);
+    };
+  }, [hidden]);
+
   return (
     <>
       <header
+        ref={headerRef}
         className={[
           styles.header,
           variant === "overlay" ? styles.overlay : styles.solid,

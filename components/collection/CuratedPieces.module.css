@@ -153,7 +153,12 @@
 @media (max-width: 1023px) {
   .filterBar {
     position: sticky;
-    top: 0;
+    /* Clears the fixed header instead of sliding beneath it. The header
+       publishes its measured height as --header-offset and sets it to 0
+       while it's slid out of view, so the bar sits below the header when
+       it's showing and rises to the top edge when it isn't. The fallback
+       of 0 keeps this sane before the first measurement. */
+    top: var(--header-offset, 0px);
     z-index: 5;
     background-color: var(--color-surface-primary);
     box-shadow: 0 1px 0 var(--color-border);

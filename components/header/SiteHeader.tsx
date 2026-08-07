@@ -8,7 +8,7 @@ import { NavOverlay, getNavMenuItems } from "@/components/nav";
 import { routes } from "@/config/routes";
 import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import { Wordmark } from "@/components/brand";
-import { CartButton } from "@/components/cart";
+import { CartButton, CartToast } from "@/components/cart";
 import { useCart } from "@/store/CartContext";
 import { CONTACT_WHATSAPP_URL } from "@/lib/contacts";
 import { SearchOverlay } from "./SearchOverlay";
@@ -280,6 +280,8 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
         </div>
       </header>
       {variant === "solid" ? <div className={styles.spacer} aria-hidden="true" /> : null}
+
+      <CartToast locale={locale} />
 
       <SearchOverlay
         isOpen={searchOpen}

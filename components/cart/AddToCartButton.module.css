@@ -1,7 +1,7 @@
-/* Bookmark save control, positioned over the top-right of the piece
+/* Add-to-cart control, positioned over the top-right of the piece
    photo. The parent .media on the card is position:relative, so this
    pins to the image corner. Outline by default; fills in on save. */
-.bookmark {
+.cartMark {
   position: absolute;
   top: var(--space-2);
   right: var(--space-2);
@@ -19,8 +19,8 @@
   transition: color var(--motion-micro) var(--ease-default),
     transform var(--motion-micro) var(--ease-default);
 }
-.bookmark:hover,
-.bookmark:focus-visible { color: var(--color-accent); transform: translateY(-1px); }
+.cartMark:hover,
+.cartMark:focus-visible { color: var(--color-accent); transform: translateY(-1px); }
 
 .icon {
   width: 22px;

@@ -1,0 +1,57 @@
+/* Bottom-anchored confirmation. Sits above page content but below the
+   cart panel itself (z 901), so opening the cart never leaves the toast
+   floating over it. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-4);
+  z-index: 880;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(92vw, 420px);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface-contrast);
+  border-radius: 2px;
+  box-shadow: 0 12px 32px -16px rgba(38, 34, 32, 0.55);
+  transform: translate(-50%, calc(100% + var(--space-5)));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--motion-standard) var(--ease-default),
+    opacity var(--motion-standard) var(--ease-default);
+}
+.visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.text {
+  color: var(--color-text-on-contrast);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text :global(*) { color: var(--color-text-on-contrast); }
+
+.action {
+  flex-shrink: 0;
+  min-height: 36px;
+  padding: 0 var(--space-2);
+  background: none;
+  border: 1px solid color-mix(in srgb, var(--color-text-on-contrast) 45%, transparent);
+  border-radius: 1px;
+  cursor: pointer;
+  color: var(--color-text-on-contrast);
+  transition: border-color var(--motion-micro) var(--ease-default);
+}
+.action :global(*) { color: var(--color-text-on-contrast); }
+.action:hover,
+.action:focus-visible {
+  border-color: var(--color-text-on-contrast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: opacity var(--motion-standard) var(--ease-default); transform: translate(-50%, 0); }
+}

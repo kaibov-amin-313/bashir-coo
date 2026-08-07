@@ -5,11 +5,18 @@ import type { Locale } from "@/lib/i18n";
 import styles from "./AddToCartButton.module.css";
 
 /**
- * Bashir&Co — add-to-cart control, styled as a bookmark glyph that sits
- * over the top-right of the piece photo (the reference pattern). Outline
- * when the piece isn't saved, filled once it is. A small client island in
- * the otherwise-server card; it takes the flattened line data as props so
- * it never has to look anything up.
+ * Bashir&Co — add-to-cart control, over the top-right of the piece photo.
+ *
+ * Draws the same bag the header uses, not a bookmark. A bookmark reads as
+ * "save for later" everywhere else on the web, so tapping one and finding
+ * a panel called "Корзина" put the sign and the thing at odds — the
+ * screen-reader label already said "В корзину" while the icon said
+ * something else. One vocabulary now: bag icon, bag in the header, cart
+ * panel.
+ *
+ * Outline when the piece isn't in the cart, filled once it is. A small
+ * client island in the otherwise-server card; it takes the flattened line
+ * data as props so it never has to look anything up.
  */
 
 interface AddToCartButtonProps {
@@ -25,7 +32,7 @@ export function AddToCartButton({ line, locale }: AddToCartButtonProps) {
   return (
     <button
       type="button"
-      className={[styles.bookmark, inCart ? styles.saved : ""]
+      className={[styles.cartMark, inCart ? styles.saved : ""]
         .filter(Boolean)
         .join(" ")}
       onClick={(e) => {
@@ -44,10 +51,17 @@ export function AddToCartButton({ line, locale }: AddToCartButtonProps) {
       }
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.icon}>
-        {/* Bookmark ribbon. fill is set by CSS: none when unsaved,
-            currentColor when saved. */}
+        {/* Same open-top bag as the header control. fill is set by CSS:
+            none until the piece is in the cart, currentColor after. */}
         <path
-          d="M6 4h12v16l-6-4-6 4V4Z"
+          d="M8 8V6.5a4 4 0 0 1 8 0V8"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <path
+          d="M5.5 8h13l1 12H4.5l1-12Z"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinejoin="round"

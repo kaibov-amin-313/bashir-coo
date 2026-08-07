@@ -151,6 +151,16 @@ interface CartContextValue {
   isOpen: boolean;
   open: () => void;
   close: () => void;
+  /**
+   * Title of the piece added a moment ago, or null.
+   *
+   * Adding gave feedback in two places only — the bookmark filling in,
+   * and the header badge. On a phone the header slides away while
+   * scrolling the catalogue, and the bookmark is under the thumb at the
+   * instant it's tapped, so the action could complete with nothing
+   * visible confirming it. This drives a brief confirmation instead.
+   */
+  lastAdded: string | null;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -158,6 +168,7 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { lines: [] });
   const [isOpen, setIsOpen] = useState(false);
+  const [lastAdded, setLastAdded] = useState<string | null>(null);
 
   // Read the stored cart once, on the client, after first paint.
   useEffect(() => {
@@ -186,10 +197,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [state.lines]);
 
-  const add = useCallback(
-    (line: Omit<CartLine, "qty">) => dispatch({ type: "add", line }),
-    []
-  );
+  const add = useCallback((line: Omit<CartLine, "qty">) => {
+    dispatch({ type: "add", line });
+    setLastAdded(line.title);
+  }, []);
+
+  // Clear the confirmation after a beat so it doesn't linger.
+  useEffect(() => {
+    if (lastAdded === null) return;
+    const t = window.setTimeout(() => setLastAdded(null), 2600);
+    return () => window.clearTimeout(t);
+  }, [lastAdded]);
   const remove = useCallback(
     (slug: string) => dispatch({ type: "remove", slug }),
     []
@@ -215,8 +233,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isOpen,
       open,
       close,
+      lastAdded,
     };
-  }, [state.lines, add, remove, setQty, clear, isOpen, open, close]);
+  }, [state.lines, add, remove, setQty, clear, isOpen, open, close, lastAdded]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

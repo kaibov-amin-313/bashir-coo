@@ -2,7 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/db/auth";
 import { getAllPieces, type PieceRecord } from "@/lib/db/pieces";
-import { logoutAction, deletePieceAction, seedAction } from "@/lib/db/actions";
+import { logoutAction, seedAction } from "@/lib/db/actions";
+import { DeletePieceButton } from "./DeletePieceButton";
 import styles from "./admin.module.css";
 
 /**
@@ -111,15 +112,11 @@ export default async function AdminPage() {
             <Link href={`/admin/${p.id}`} className={styles.btn}>
               Изменить
             </Link>
-            <form action={deletePieceAction}>
-              <input type="hidden" name="id" value={p.id} />
-              <button
-                type="submit"
-                className={`${styles.btn} ${styles.btnDanger}`}
-              >
-                Удалить
-              </button>
-            </form>
+            <DeletePieceButton
+              id={p.id}
+              title={p.titleRu || p.titleEn || p.slug}
+              className={`${styles.btn} ${styles.btnDanger}`}
+            />
           </div>
         </div>
       ))}

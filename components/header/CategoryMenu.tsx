@@ -5,7 +5,7 @@ import Link from "next/link";
 import { TypeBase } from "@/components/type";
 import { MediaSlot } from "@/components/media";
 import { routes } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Category } from "@/types";
 import type { PlaceholderKind } from "@/components/media";
 import styles from "./CategoryMenu.module.css";
@@ -123,7 +123,7 @@ export function CategoryMenu({
                 src={shown.image}
                 fallbackKind={shown.fallback}
                 alt=""
-                label={dictionary.categoryLabels[shown.category].toUpperCase()}
+                label={categoryLabelOf(dictionary, shown.category).toUpperCase()}
               />
             </span>
 

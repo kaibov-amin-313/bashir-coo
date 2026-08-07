@@ -5,7 +5,7 @@ import { CuratedPieceCard } from "@/components/collection";
 import { RevealScope } from "@/components/motion/RevealScope";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
 import { routes } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Category } from "@/types";
 import styles from "./HomeSections.module.css";
 
@@ -118,7 +118,7 @@ export function HomeSections({ locale, dictionary, pieces }: HomeSectionsProps) 
                   fallbackKind={piece.visualVariant}
                   alt={piece.title}
                   sizes="(max-width: 599px) 100vw, 33vw"
-                  label={dictionary.categoryLabels[piece.category].toUpperCase()}
+                  label={categoryLabelOf(dictionary, piece.category).toUpperCase()}
                 />
               </span>
               <span className={styles.showcaseLabel}>

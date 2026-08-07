@@ -16,7 +16,7 @@ import { minimumHolds } from "@/tokens/motion";
 import type { Piece } from "@/types";
 import Link from "next/link";
 import { routes, PIECE_QUERY_PARAM } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import styles from "./Passage.module.css";
 
 /**
@@ -126,7 +126,7 @@ export function PassageWrapper({ piece, anchor, dictionary, locale }: PassageWra
           {piece.title}
         </TypeBase>
         <TypeBase variant="metadata" as="span">
-          {dictionary.categoryLabels[piece.category]}
+          {categoryLabelOf(dictionary, piece.category)}
         </TypeBase>
       </header>
 

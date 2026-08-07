@@ -12,7 +12,7 @@ import { CuratedPieceCard } from "./CuratedPieceCard";
 import { FilterPanel, EMPTY_FILTERS, type Filters } from "./FilterPanel";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
 import { routes } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { plural, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Category } from "@/types";
 import styles from "./CuratedPieces.module.css";
 
@@ -107,7 +107,11 @@ export function CuratedPiecesView({ locale, dictionary, pieces }: CuratedPiecesV
           <span className={styles.count}>
             <TypeBase variant="metadata" as="span">
               {shown.length}{" "}
-              {locale === "ru" ? "позиций" : shown.length === 1 ? "piece" : "pieces"}
+              {locale === "ru"
+                ? plural(shown.length, "позиция", "позиции", "позиций")
+                : shown.length === 1
+                  ? "piece"
+                  : "pieces"}
             </TypeBase>
           </span>
 
@@ -128,12 +132,40 @@ export function CuratedPiecesView({ locale, dictionary, pieces }: CuratedPiecesV
           </button>
         </div>
 
-        {/* Grid of large photo cards */}
-        <section className={styles.grid} aria-label={d.title}>
-          {shown.map((piece) => (
-            <CuratedPieceCard key={piece.slug} piece={piece} locale={locale} dictionary={dictionary} />
-          ))}
-        </section>
+        {/* Grid of large photo cards, or an explanation when the filters
+            exclude everything. An empty grid is reachable in one click —
+            the Perfume category exists in the filter list but holds no
+            pieces yet — and silently rendering nothing reads as a broken
+            page rather than an empty result. */}
+        {shown.length === 0 ? (
+          <section className={styles.emptyState}>
+            <TypeBase variant="collectionTitle" as="p">
+              {locale === "ru"
+                ? "По этим фильтрам ничего нет"
+                : "Nothing matches these filters"}
+            </TypeBase>
+            <TypeBase variant="caption" as="p">
+              {locale === "ru"
+                ? "Снимите часть условий — или напишите нам, и мы найдём это под заказ."
+                : "Loosen the filters — or tell us, and we'll source it."}
+            </TypeBase>
+            <button
+              type="button"
+              className={styles.emptyReset}
+              onClick={() => setFilters(EMPTY_FILTERS)}
+            >
+              <TypeBase variant="ctaText" as="span">
+                {locale === "ru" ? "Сбросить фильтры" : "Clear filters"}
+              </TypeBase>
+            </button>
+          </section>
+        ) : (
+          <section className={styles.grid} aria-label={d.title}>
+            {shown.map((piece) => (
+              <CuratedPieceCard key={piece.slug} piece={piece} locale={locale} dictionary={dictionary} />
+            ))}
+          </section>
+        )}
 
         {/* Bottom inquiry CTA */}
         <section className={styles.closing}>

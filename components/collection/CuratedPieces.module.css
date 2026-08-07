@@ -212,3 +212,39 @@
 @media (max-width: 599px) {
   .filterBar { padding-left: var(--space-3); padding-right: var(--space-3); }
 }
+
+/* Empty result state — replaces the grid when filters match nothing.
+   Generous vertical space so the page doesn't collapse to a thin strip
+   between the filter bar and the closing CTA. */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-9) var(--space-4);
+  max-width: 46ch;
+  margin: 0 auto;
+  color: var(--color-text-secondary);
+}
+.emptyReset {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-5);
+  min-height: 48px;
+  background: none;
+  border: 1px solid var(--color-text-primary);
+  border-radius: 1px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition:
+    background-color var(--motion-micro) var(--ease-default),
+    color var(--motion-micro) var(--ease-default);
+}
+.emptyReset:hover,
+.emptyReset:focus-visible { background-color: var(--color-text-primary); }
+.emptyReset:hover :global(span),
+.emptyReset:focus-visible :global(span) { color: var(--color-surface-primary); }
+
+@media (max-width: 599px) {
+  .emptyState { padding: var(--space-7) var(--space-3); }
+}

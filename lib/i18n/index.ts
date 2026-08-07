@@ -196,3 +196,45 @@ export const collectionText: Record<
     },
   },
 };
+
+/**
+ * The label for a category, never undefined.
+ *
+ * A piece can carry a category the dictionary doesn't know — a value
+ * written before validation existed, or one retired from the union while
+ * rows still referenced it (`rareCollectible` was removed exactly that
+ * way). Callers dereference the result, so returning the raw key beats
+ * returning undefined and taking the page down with it.
+ */
+export function categoryLabel(
+  dictionary: Dictionary,
+  category: string
+): string {
+  return (
+    (dictionary.categoryLabels as Record<string, string>)[category] ?? category
+  );
+}
+
+/**
+ * Russian count agreement: 1 позиция / 2–4 позиции / 5+ позиций.
+ *
+ * The catalogue previously printed "позиций" for every count, so it read
+ * "1 позиций". English was handled correctly in the same expression;
+ * Russian — the primary language of the site — was not.
+ *
+ * The 11–14 exception is the reason a naive `n % 10` check isn't enough:
+ * 11 takes the same form as 5, not the same as 1.
+ */
+export function plural(
+  n: number,
+  one: string,
+  few: string,
+  many: string
+): string {
+  const mod100 = Math.abs(n) % 100;
+  const mod10 = mod100 % 10;
+  if (mod100 >= 11 && mod100 <= 14) return many;
+  if (mod10 === 1) return one;
+  if (mod10 >= 2 && mod10 <= 4) return few;
+  return many;
+}

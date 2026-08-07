@@ -4,7 +4,7 @@ import { MediaSlot } from "@/components/media";
 import { AddToCartButton } from "@/components/cart";
 import { formatUsd } from "@/lib/price";
 import { routes, PIECE_QUERY_PARAM } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
 import styles from "./CuratedPieceCard.module.css";
 
@@ -27,7 +27,7 @@ interface CuratedPieceCardProps {
 
 export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCardProps) {
   const inquiryHref = `${localePath(locale, routes.contact)}?${PIECE_QUERY_PARAM}=${piece.slug}`;
-  const categoryLabel = dictionary.categoryLabels[piece.category];
+  const categoryLabel = categoryLabelOf(dictionary, piece.category);
 
   return (
     <article className={styles.card} aria-label={piece.title}>

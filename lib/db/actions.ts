@@ -1,6 +1,7 @@
 "use server";
 
 import { parseUsdInput } from "@/lib/price";
+import { parseCategory } from "@/config/categories";
 import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { put } from "@vercel/blob";
@@ -63,6 +64,11 @@ function slugify(input: string): string {
   };
   return input
     .toLowerCase()
+    // Strip accents first, so "Hermès" becomes "hermes" rather than
+    // "herm-s" — the non-ASCII character would otherwise be swept up by
+    // the punctuation replace below and turned into a separator.
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .split("")
     .map((c) => map[c] ?? c)
     .join("")
@@ -79,12 +85,30 @@ function readForm(form: FormData): PieceInput {
   if (!titleRu) throw new Error("Название (RU) обязательно");
   if (!titleEn) throw new Error("Название (EN) обязательно");
 
+  // slug is UNIQUE NOT NULL. A title in a script slugify can't transliterate
+  // (or one that's only punctuation) reduces to "", which saves once and
+  // then fails the second time with a raw Postgres uniqueness error in the
+  // admin's face. Fall back to a timestamped stem instead — ugly, but
+  // editable, and it never collides.
+  const slug =
+    slugify(slugRaw || titleEn) ||
+    slugify(titleRu) ||
+    `piece-${Date.now().toString(36)}`;
+
   return {
-    slug: slugify(slugRaw || titleEn),
-    category: (String(form.get("category") ?? "watches") as Category),
+    slug,
+    // Validated, not cast: `as Category` is erased at build time, so an
+    // unrecognised value would reach the database and then crash every
+    // page that looks the label up. Unknown input falls back to the
+    // default rather than being written through.
+    category: parseCategory(String(form.get("category") ?? "")) ?? "watches",
     subcategory: String(form.get("subcategory") ?? "").trim() || null,
     brand: String(form.get("brand") ?? "").trim(),
-    gender: (String(form.get("gender") ?? "unisex") as Gender),
+    gender: (["men", "women", "unisex"] as const).includes(
+      String(form.get("gender") ?? "") as Gender
+    )
+      ? (String(form.get("gender")) as Gender)
+      : "unisex",
     titleRu,
     titleEn,
     descriptionRu: String(form.get("descriptionRu") ?? "").trim() || undefined,

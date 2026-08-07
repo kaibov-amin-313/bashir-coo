@@ -20,3 +20,17 @@ export const CATEGORIES: Category[] = [
   "accessories",
   "perfume",
 ];
+
+/**
+ * Narrows an arbitrary string to a Category, or null if it isn't one.
+ *
+ * `as Category` on form input is a compile-time cast and nothing more —
+ * at runtime any string reaches the database. That matters because the
+ * category is used as a dictionary key and the result is dereferenced
+ * (`categoryLabels[category].toUpperCase()`), so one bad value renders
+ * the catalogue, the homepage showcase and the search overlay
+ * uncrashable-in-theory but crashing-in-fact. This is the gate.
+ */
+export function parseCategory(value: string): Category | null {
+  return (CATEGORIES as string[]).includes(value) ? (value as Category) : null;
+}

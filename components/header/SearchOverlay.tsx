@@ -7,7 +7,7 @@ import { MediaSlot } from "@/components/media";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import type { LocalizedCuratedPiece } from "@/data/curatedPieces";
 import { routes } from "@/config/routes";
-import { localePath, type Dictionary, type Locale } from "@/lib/i18n";
+import { categoryLabel as categoryLabelOf, localePath, type Dictionary, type Locale } from "@/lib/i18n";
 import type { Category } from "@/types";
 import { Wordmark } from "@/components/brand";
 import styles from "./SearchOverlay.module.css";
@@ -39,6 +39,23 @@ interface SearchOverlayProps {
   query: string;
   onQueryChange: (value: string) => void;
   restoreFocusRef?: React.RefObject<HTMLElement | null>;
+}
+
+
+/**
+ * Lowercases and strips diacritics, so a query typed on a Russian or
+ * plain-Latin keyboard still matches the catalogue's accented names.
+ *
+ * Two of eleven brands carry accents — Hermès and Cartier's Panthère —
+ * and a plain `includes` meant "hermes" and "panthere" returned nothing
+ * at all. NFD splits a letter into base + combining mark; the range
+ * U+0300–U+036F is those marks.
+ */
+function normalize(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 export function SearchOverlay({
@@ -80,15 +97,15 @@ export function SearchOverlay({
 
   // Live filter: title (brand lives here), category label.
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = normalize(query.trim());
     if (!q) return [];
     return pieces.filter((p) => {
-      const haystack = [
-        p.title,
-        dictionary.categoryLabels[p.category],
-      ]
-        .join(" ")
-        .toLowerCase();
+      // Brand is included explicitly: it isn't guaranteed to appear in
+      // the title, so a piece entered as brand "Rolex" / title
+      // "Submariner 5513" would otherwise be unfindable by brand.
+      const haystack = normalize(
+        [p.title, p.brand, categoryLabelOf(dictionary, p.category)].join(" ")
+      );
       return haystack.includes(q);
     });
   }, [query, pieces, dictionary]);
@@ -213,7 +230,7 @@ export function SearchOverlay({
                       src={piece.image}
                       fallbackKind={piece.visualVariant}
                       alt={piece.title}
-                      label={dictionary.categoryLabels[piece.category].toUpperCase()}
+                      label={categoryLabelOf(dictionary, piece.category).toUpperCase()}
                     />
                   </span>
                   <span className={styles.cardTitle}>
@@ -221,7 +238,7 @@ export function SearchOverlay({
                   </span>
                   <span className={styles.cardCategory}>
                     <TypeBase variant="metadata" as="span">
-                      {dictionary.categoryLabels[piece.category]}
+                      {categoryLabelOf(dictionary, piece.category)}
                     </TypeBase>
                   </span>
                 </Link>

@@ -39,7 +39,6 @@ export interface NavMenuItemProps {
 export interface NavConciergeThreadProps {
   locale: Locale;
   dictionary: Dictionary;
-  warmed?: boolean;
   className?: string;
 }
 

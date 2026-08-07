@@ -226,12 +226,17 @@
   .wordmarkImg { height: 44px; }
 }
 
-/* Spacer reserves the fixed solid header's height so content isn't hidden. */
+/* Spacer reserves the fixed solid header's height so content isn't hidden.
+   Uses the height the header measures for itself (--header-offset) rather
+   than a hard-coded number: the announcement line wraps to two lines on a
+   narrow phone, which made the real header taller than the 200px reserved
+   here and pushed the top of the page underneath it. The literals remain
+   only as the pre-measurement fallback. */
 .spacer {
-  height: 222px;
+  height: var(--header-height, 222px);
 }
 @media (max-width: 899px) {
-  .spacer { height: 200px; }
+  .spacer { height: var(--header-height, 200px); }
 }
 
 /* Overlay header, once scrolled past the hero: becomes a solid, legible

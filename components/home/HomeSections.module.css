@@ -59,6 +59,21 @@
 }
 .heroLabel :global(*) { color: var(--color-text-on-contrast); }
 
+/* Sits between the headline and the actions, over the photograph — same
+   ivory as the rest of the hero text, held to a readable measure and
+   slightly quieter than the headline so the hierarchy stays intact. */
+.heroSubtitle {
+  max-width: 46ch;
+  text-align: center;
+  color: var(--color-text-on-contrast);
+  opacity: 0.92;
+}
+.heroSubtitle :global(*) { color: var(--color-text-on-contrast); }
+
+@media (max-width: 599px) {
+  .heroSubtitle { max-width: 34ch; }
+}
+
 .heroActions {
   display: flex;
   gap: var(--space-5);

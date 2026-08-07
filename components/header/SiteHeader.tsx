@@ -119,8 +119,18 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
     if (!el) return;
 
     const publish = () => {
-      const h = hidden ? 0 : el.getBoundingClientRect().height;
-      document.documentElement.style.setProperty("--header-offset", `${h}px`);
+      const h = el.getBoundingClientRect().height;
+      const root = document.documentElement.style;
+      // Two values, deliberately different:
+      //   --header-height stays the real measured height at all times, so
+      //     the spacer that reserves room for the fixed header never
+      //     collapses (it would jolt the page every time the header
+      //     slides away).
+      //   --header-offset is that height, or 0 while the header is out of
+      //     view, so sticky elements sit under it when it's showing and
+      //     rise to the top edge when it isn't.
+      root.setProperty("--header-height", `${h}px`);
+      root.setProperty("--header-offset", `${hidden ? 0 : h}px`);
     };
 
     publish();
@@ -255,13 +265,18 @@ export function SiteHeader({ locale, dictionary, variant = "solid" }: SiteHeader
           onClose={() => setMenuOpen(false)}
         />
 
-        {/* Tier 3 — thin announcement runner (no bordeaux double rule) */}
+        {/* Tier 3 — thin announcement runner.
+            The ‹ › arrows that used to flank this were real <button>
+            elements with no handler and nothing to page through: the
+            announcement is a single string. They promised a control that
+            didn't exist, put two dead stops in the keyboard tab order on
+            every page, and announced themselves to screen readers as
+            "Previous"/"Next" in English on a Russian page. Removed rather
+            than wired up — a one-line notice doesn't need a carousel. */}
         <div className={styles.announce}>
-          <button type="button" className={styles.announceArrow} aria-label="Previous">‹</button>
           <span className={styles.announceText}>
             <TypeBase variant="caption" as="span">{dictionary.announcement}</TypeBase>
           </span>
-          <button type="button" className={styles.announceArrow} aria-label="Next">›</button>
         </div>
       </header>
       {variant === "solid" ? <div className={styles.spacer} aria-hidden="true" /> : null}

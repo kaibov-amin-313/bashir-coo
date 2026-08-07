@@ -76,6 +76,15 @@ export function HomeSections({ locale, dictionary, pieces }: HomeSectionsProps) 
             <TypeBase variant="metadata" as="span">{d.home.hero.label}</TypeBase>
           </span>
           <TypeBase variant="heroHeadline" as="h1">{d.home.hero.title}</TypeBase>
+          {/* The one line on the site that answers all three questions a
+              first-time visitor has — what you source, what you do with
+              it, where you deliver. It was written and then never
+              rendered, leaving the hero to say only "Найдём то, чего нет
+              в магазинах", which is evocative but doesn't explain the
+              business. */}
+          <span className={styles.heroSubtitle}>
+            <TypeBase variant="body" as="p">{d.home.hero.subtitle}</TypeBase>
+          </span>
           <div className={styles.heroActions}>
             <Link href={localePath(locale, routes.contact)} className={styles.heroCtaPrimary}>
               <TypeBase variant="ctaText" as="span">{d.common.submitInquiry}</TypeBase>

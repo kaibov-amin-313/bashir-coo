@@ -61,7 +61,7 @@ export const en: Dictionary = {
       title: "Name the model — or just describe it",
       text: "A discontinued piece, a rare size, a particular colour. We find what the stores in Kazakhstan don't carry — and bring it to Almaty.",
       ctaPrimary: "How it works",
-      ctaSecondary: "Message us",
+      ctaSecondary: "Submit an inquiry",
     },
     stories: [
       { title: "We verify authenticity", text: "We work only with trusted sellers. For pieces with history, we request papers and expert checks." },
@@ -71,7 +71,7 @@ export const en: Dictionary = {
     serviceBanner: {
       label: "Sourced on request",
       statement: "This site shows only a fraction. Tell us what you need — name the model, or just describe it.",
-      cta: "Message us on WhatsApp",
+      cta: "Submit an inquiry",
     },
     categories: {
       heading: "What We Source",
@@ -138,15 +138,15 @@ export const en: Dictionary = {
     inquire: "Inquire",
     closing:
       "Didn't find what you need? Message us — we'll source it.",
-    closingCta: "Message Us",
+    closingCta: "Submit an inquiry",
     quieterWay:
       "If you already know what you're looking for, tell us directly. It's faster than searching the site.",
-    quieterWayCta: "Describe What You're Seeking",
+    quieterWayCta: "Submit an inquiry",
   },
   specialPieces: {
     title: "Sourced on Request",
     text: "This is how we find most pieces — for one specific person. A discontinued model, a rare size, a particular colour, something from an old collection. Tell us what you need, and we'll say whether it's findable, how long it'll take, and what it'll cost.",
-    cta: "Message Us",
+    cta: "Submit an inquiry",
   },
   about: {
     title: "About the Project",
@@ -167,7 +167,7 @@ export const en: Dictionary = {
         },
       ],
     },
-    cta: "Message Us",
+    cta: "Submit an inquiry",
     paragraphs: [
       "Bashir&Co sources luxury pieces to order — watches, clothing, footwear, bags, jewelry, accessories. We find what the stores in Kazakhstan don't carry: discontinued models, rare sizes, pieces from past collections.",
       "We are not a shop and not a marketplace. There is no storefront of stock and no buy button. There is a conversation: you describe what you're seeking, we search, verify, and deliver.",
@@ -206,7 +206,7 @@ export const en: Dictionary = {
       "We work with private collections, archives, and trusted dealers across Europe, Asia, and the United States. We report on the search exactly as much as you care to know — without noise.",
       "The search is confidential in both directions: the seller doesn't know who we're searching for, unless you want them to.",
     ],
-    cta: "Start a Conversation",
+    cta: "Submit an inquiry",
   },
   contactPage: {
     title: "Contact",

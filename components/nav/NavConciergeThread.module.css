@@ -15,9 +15,6 @@
   opacity: 1;
 }
 
-.thread.warmed {
-  opacity: 0.94; /* a small, undisclosed nudge — see Motion Bible Ch.9 */
-}
 
 @media (max-width: 599px) {
   .thread {

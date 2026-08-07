@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-# Служебные страницы не индексируем
-Disallow: /dev/

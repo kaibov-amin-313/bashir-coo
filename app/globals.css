@@ -11,14 +11,23 @@
    Light). Variable weight axis 300–700; used via --font-heading. */
 @font-face {
   font-family: "Cormorant";
-  src: url("/fonts/Cormorant-var.ttf") format("truetype-variations");
+  /* WOFF2 first: 114 KB against the TTF's 559 KB, because WOFF2 is
+     Brotli-compressed where TTF ships raw, and this copy is subset to the
+     alphabets the site actually sets (Latin + Cyrillic + punctuation,
+     currency and arrows — verified against every string in the
+     dictionaries, nothing dropped). The TTF stays as a fallback for
+     anything that can't take WOFF2; browsers pick the first format they
+     understand, so modern ones never download it. */
+  src: url("/fonts/Cormorant-var.woff2") format("woff2-variations"),
+       url("/fonts/Cormorant-var.ttf") format("truetype-variations");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: "Cormorant";
-  src: url("/fonts/Cormorant-Italic-var.ttf") format("truetype-variations");
+  src: url("/fonts/Cormorant-Italic-var.woff2") format("woff2-variations"),
+       url("/fonts/Cormorant-Italic-var.ttf") format("truetype-variations");
   font-weight: 300 700;
   font-style: italic;
   font-display: swap;
@@ -43,3 +52,27 @@
   line-gap-override: 0%;
 }
 
+
+/* Skip link — the first thing in the tab order, invisible until focused.
+   The header carries three tiers (wordmark, nav, concierge thread) plus
+   search, cart and locale controls, so a keyboard user was tabbing
+   through the whole apparatus on every page before reaching the content.
+   It reveals itself on focus rather than staying hidden, so sighted
+   keyboard users can see where they are. */
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-surface-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-accent);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+.skipLink:focus {
+  left: var(--space-3);
+  top: var(--space-3);
+}

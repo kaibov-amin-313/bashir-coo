@@ -13,7 +13,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [],
+    /**
+     * Photos uploaded through the admin live in Vercel Blob, which serves
+     * them from a per-store subdomain of blob.vercel-storage.com. Without
+     * this entry next/image refuses the hostname and every
+     * admin-uploaded photo 400s — the pieces shipped in the repo would
+     * still render, so the breakage would only show up on the pieces the
+     * house actually adds.
+     */
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.public.blob.vercel-storage.com",
+      },
+    ],
+    /* AVIF first, WebP second, original as the floor. */
+    formats: ["image/avif", "image/webp"],
   },
 };
 

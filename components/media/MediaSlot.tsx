@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { PlaceholderMedia, type PlaceholderKind } from "@/components/media";
 import styles from "./MediaSlot.module.css";
 
@@ -13,9 +14,22 @@ import styles from "./MediaSlot.module.css";
  * placeholder shows through. Real photos replace placeholders 1:1 with
  * no layout change.
  *
- * Guards the hydration race: if the browser finishes loading the <img>
- * before React attaches onLoad (common for cached/fast images), the
- * mount effect detects img.complete and reveals it anyway.
+ * The photo goes through next/image rather than a bare <img>: the source
+ * JPEGs are full-resolution (the homepage hero alone is 492 KB) and a
+ * phone was downloading exactly the same file as a desktop. next/image
+ * re-encodes to AVIF/WebP and serves a width suited to the device, which
+ * is the largest weight saving available on a site whose first
+ * impression is a full-bleed photograph.
+ *
+ * `sizes` is how the right width gets chosen, and it can't be guessed
+ * from inside this component — a hero fills the viewport while a cart
+ * thumbnail is 76px wide. Callers that aren't full-bleed should say so;
+ * the default assumes they are, which is wasteful rather than broken if
+ * left unset.
+ *
+ * Guards the hydration race: if the browser finishes loading the image
+ * before React attaches onLoad (common for cached images), the mount
+ * effect detects img.complete and reveals it anyway.
  */
 
 interface MediaSlotProps {
@@ -25,6 +39,8 @@ interface MediaSlotProps {
   priority?: boolean;
   label?: string;
   className?: string;
+  /** CSS `sizes` for srcset selection. Defaults to full viewport width. */
+  sizes?: string;
 }
 
 export function MediaSlot({
@@ -34,6 +50,7 @@ export function MediaSlot({
   priority = false,
   label,
   className,
+  sizes = "100vw",
 }: MediaSlotProps) {
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -59,17 +76,19 @@ export function MediaSlot({
         className={styles.fallback}
       />
       {showImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           ref={imgRef}
           src={src}
           alt={alt}
+          fill
+          sizes={sizes}
           className={[styles.image, loaded ? styles.imageLoaded : ""]
             .filter(Boolean)
             .join(" ")}
-          loading={priority ? "eager" : "lazy"}
+          priority={priority}
           onLoad={(e) => {
-            if ((e.target as HTMLImageElement).naturalWidth > 0) setLoaded(true);
+            const img = e.target as HTMLImageElement;
+            if (img.naturalWidth > 0) setLoaded(true);
             else setFailed(true);
           }}
           onError={() => setFailed(true)}

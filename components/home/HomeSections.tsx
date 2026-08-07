@@ -117,6 +117,7 @@ export function HomeSections({ locale, dictionary, pieces }: HomeSectionsProps) 
                   src={piece.image}
                   fallbackKind={piece.visualVariant}
                   alt={piece.title}
+                  sizes="(max-width: 599px) 100vw, 33vw"
                   label={dictionary.categoryLabels[piece.category].toUpperCase()}
                 />
               </span>
@@ -143,6 +144,7 @@ export function HomeSections({ locale, dictionary, pieces }: HomeSectionsProps) 
             <MediaSlot
               src="/images/editorial/sourcing-detail.jpg"
               fallbackKind="macroTexture"
+              sizes="(max-width: 599px) 40vw, 220px"
               label={d.home.split.label.toUpperCase()}
             />
           </span>

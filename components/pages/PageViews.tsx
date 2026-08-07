@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { TypeBase } from "@/components/type";
+import { SkipLink } from "@/components/a11y";
 import { MediaSlot } from "@/components/media";
 import { NavConciergeThread } from "@/components/nav";
 import { SiteHeader } from "@/components/header";
@@ -49,9 +50,10 @@ function PageChrome({
 }: ViewProps & { children: React.ReactNode }) {
   return (
     <>
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
-      <main lang={locale === "en" ? "en" : undefined}>{children}</main>
+      <main id="content" lang={locale === "en" ? "en" : undefined}>{children}</main>
       <FooterRoot locale={locale} dictionary={dictionary} />
     </>
   );

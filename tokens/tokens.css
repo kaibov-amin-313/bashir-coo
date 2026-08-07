@@ -39,7 +39,13 @@
   --color-text-primary: #262220;
   --color-text-primary-max: #241f19;
   --color-text-secondary: #6f665d;
-  --color-text-muted: #9a9186;
+  /* Darkened from #9a9186, which measured 2.90:1 on --color-surface-primary
+     and so failed WCAG AA (4.5 for body text, and even the 3.0 large-text
+     floor). Same warm grey-beige hue, taken down until it clears AA at
+     4.61:1 — this token carries the catalogue count, filter labels, the
+     search placeholder and the cart's small print, so the old value was
+     failing in 32 places at once. */
+  --color-text-muted: #786f64;
 
   /* Derived from --color-text-primary via color-mix(), not a second
      hardcoded value — Design System's 8–12% opacity border rule. */

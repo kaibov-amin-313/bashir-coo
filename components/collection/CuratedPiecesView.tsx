@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { NavConciergeThread } from "@/components/nav";
+import { SkipLink } from "@/components/a11y";
 import { SiteHeader } from "@/components/header";
 import { FooterRoot } from "@/components/footer";
 import { TypeBase } from "@/components/type";
@@ -78,10 +79,11 @@ export function CuratedPiecesView({ locale, dictionary, pieces }: CuratedPiecesV
 
   return (
     <>
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
       <CollectionLenis />
-      <main lang={locale === "en" ? "en" : undefined}>
+      <main id="content" lang={locale === "en" ? "en" : undefined}>
         {/* Breadcrumbs */}
         <nav className={styles.breadcrumbs} aria-label="breadcrumb">
           <Link href={localePath(locale, routes.home)} className={styles.crumbLink}>

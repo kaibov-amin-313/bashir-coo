@@ -17,7 +17,7 @@ export const en: Dictionary = {
   meta: {
     siteTitle: "Bashir&Co — Private Sourcing of Rare Pieces",
     siteDescription:
-      "We source luxury pieces to order: watches, clothing, footwear, bags, jewelry. What the stores don't carry. Delivered to Almaty.",
+      "We source luxury pieces to order: watches, clothing, footwear, bags, jewelry, accessories, perfume. What the stores don't carry. Delivered to Almaty.",
   },
   nav: {
     open: "Open menu",

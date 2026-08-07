@@ -36,6 +36,7 @@ export function CuratedPieceCard({ piece, locale, dictionary }: CuratedPieceCard
           <MediaSlot
             src={piece.image}
             fallbackKind={piece.visualVariant}
+            sizes="(max-width: 599px) 50vw, (max-width: 1023px) 33vw, 25vw"
             alt={piece.title}
             label={categoryLabel.toUpperCase()}
           />

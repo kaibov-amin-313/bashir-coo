@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { NavConciergeThread } from "@/components/nav";
+import { SkipLink } from "@/components/a11y";
 import { SiteHeader } from "@/components/header";
 import { FooterRoot } from "@/components/footer";
 import { Preloader } from "@/components/preloader/Preloader";
@@ -45,9 +46,15 @@ export function Homepage({ locale, dictionary, children }: HomepageProps) {
   return (
     <div className={styles.homeRoot}>
       <Preloader />
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} variant="overlay" />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
-      <main>{children}</main>
+      {/* The document element is `lang="ru"` (a single root layout can't
+          vary it per route), so English routes mark their content here —
+          the same thing CollectionViews and PageViews already do. Without
+          it a screen reader reads the English homepage with Russian
+          pronunciation rules. */}
+      <main id="content" lang={locale === "en" ? "en" : undefined}>{children}</main>
       <FooterRoot locale={locale} dictionary={dictionary} />
     </div>
   );

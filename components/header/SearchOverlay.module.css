@@ -93,7 +93,9 @@
   color: var(--color-text-primary);
   padding: var(--space-2) 0;
 }
-.input::placeholder { color: var(--color-text-muted); opacity: 0.8; }
+/* No opacity here: --color-text-muted is tuned to clear WCAG AA at 4.61:1,
+   and an 0.8 alpha over the ivory surface dropped it back to 3.18:1. */
+.input::placeholder { color: var(--color-text-muted); }
 .input:focus-visible { outline: none; }
 
 /* ---- Body: categories | results ---- */

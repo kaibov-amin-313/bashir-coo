@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { getDictionary } from "@/lib/i18n";
 import { CartProvider } from "@/store/CartContext";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * Bashir&Co — Root layout. Default locale is Russian (`/` = RU,
@@ -18,6 +19,7 @@ import { CartProvider } from "@/store/CartContext";
 const d = getDictionary("ru");
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: d.meta.siteTitle,
   description: d.meta.siteDescription,
   openGraph: {
@@ -59,9 +61,9 @@ export default function RootLayout({
             widens the swap window on the most-visible element on the site. */}
         <link
           rel="preload"
-          href="/fonts/Cormorant-var.ttf"
+          href="/fonts/Cormorant-var.woff2"
           as="font"
-          type="font/ttf"
+          type="font/woff2"
           crossOrigin="anonymous"
         />
       </head>

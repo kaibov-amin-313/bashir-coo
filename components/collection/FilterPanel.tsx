@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { TypeBase } from "@/components/type";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import type { LocalizedCuratedPiece, Gender } from "@/data/curatedPieces";
 import { subcategoriesFor } from "@/data/subcategories";
 import type { Dictionary, Locale } from "@/lib/i18n";
@@ -68,7 +69,9 @@ export function FilterPanel({
   locale,
   dictionary,
 }: FilterPanelProps) {
+  const panelRef = useRef<HTMLElement>(null);
   useScrollLock(isOpen);
+  useDialogFocus(isOpen, panelRef, onClose);
 
   // Which category is expanded. One at a time — several open at once
   // turns the panel into a wall of checkboxes.
@@ -105,15 +108,6 @@ export function FilterPanel({
     filters.brands.length +
     filters.genders.length;
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
-
   const t = (ru: string, en: string) => (locale === "ru" ? ru : en);
 
   return (
@@ -127,6 +121,8 @@ export function FilterPanel({
       />
 
       <aside
+        ref={panelRef}
+        tabIndex={-1}
         className={[styles.panel, isOpen ? styles.open : ""]
           .filter(Boolean)
           .join(" ")}

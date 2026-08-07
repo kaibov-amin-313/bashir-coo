@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { NavConciergeThread } from "@/components/nav";
+import { SkipLink } from "@/components/a11y";
 import { SiteHeader } from "@/components/header";
 import { FooterRoot } from "@/components/footer";
 import {
@@ -32,10 +33,11 @@ export function CollectionIndexView({
 }: CollectionIndexViewProps) {
   return (
     <>
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
       <CollectionLenis />
-      <main lang={locale === "en" ? "en" : undefined}>
+      <main id="content" lang={locale === "en" ? "en" : undefined}>
         <CollectionOpeningFrame title={dictionary.collectionPage.title} />
         <CollectionSequence collections={collections} locale={locale} />
         <CollectionQuieterWayThrough locale={locale} dictionary={dictionary} />
@@ -57,13 +59,14 @@ export function CollectionDetailView({
 }: CollectionDetailViewProps) {
   return (
     <>
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
       <CollectionLenis />
       <Suspense fallback={null}>
         <PieceScrollHandler />
       </Suspense>
-      <main lang={locale === "en" ? "en" : undefined}>
+      <main id="content" lang={locale === "en" ? "en" : undefined}>
         <CollectionOpeningFrame
           title={collection.name}
           atmosphere={collection.atmosphere}
@@ -87,10 +90,11 @@ export function SpecialPiecesView({
 }: SpecialPiecesViewProps) {
   return (
     <>
+      <SkipLink locale={locale} />
       <SiteHeader locale={locale} dictionary={dictionary} />
       <NavConciergeThread locale={locale} dictionary={dictionary} />
       <CollectionLenis />
-      <main lang={locale === "en" ? "en" : undefined}>
+      <main id="content" lang={locale === "en" ? "en" : undefined}>
         <CollectionSpecialPiecesBlock locale={locale} dictionary={dictionary} />
       </main>
       <FooterRoot locale={locale} dictionary={dictionary} />

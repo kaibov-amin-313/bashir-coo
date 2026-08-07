@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRef } from "react";
 import { TypeBase } from "@/components/type";
 import { MediaSlot } from "@/components/media";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { useDialogFocus } from "@/hooks/useDialogFocus";
 import { useCart } from "@/store/CartContext";
 import { whatsappLink } from "@/lib/contacts";
 import { formatUsd, sumUsd, priceOnRequestLabel } from "@/lib/price";
@@ -34,16 +35,9 @@ interface CartPanelProps {
 
 export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
   const { lines, count, remove, setQty, clear } = useCart();
+  const panelRef = useRef<HTMLElement>(null);
   useScrollLock(isOpen);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
+  useDialogFocus(isOpen, panelRef, onClose);
 
   const t = (ru: string, en: string) => (locale === "ru" ? ru : en);
 
@@ -82,6 +76,8 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
       />
 
       <aside
+        ref={panelRef}
+        tabIndex={-1}
         className={[styles.panel, isOpen ? styles.panelOpen : ""]
           .filter(Boolean)
           .join(" ")}
@@ -136,6 +132,7 @@ export function CartPanel({ isOpen, onClose, locale }: CartPanelProps) {
                   <MediaSlot
                     src={line.image}
                     fallbackKind={line.visualVariant as never}
+                    sizes="76px"
                     alt={line.title}
                     label={line.category.toUpperCase()}
                   />
